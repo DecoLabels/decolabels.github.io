@@ -1,0 +1,29 @@
+img.logo{	
+    display: block;
+    margin: 0 auto;
+	width: 200px;
+	height: 80px;
+	}
+img.home-icon{
+margin: auto;}
+
+select{
+	background-color: #fff!important;
+    border-color: #dbdbdb!important;
+    border-radius: 4px!important;
+    color: #363636!important;
+}
+.footer{ 
+ position: relative;
+ background-color: transparent;
+}
+.footer-home{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+.navbar-item img {
+    max-height: 100%;
+}
