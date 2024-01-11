@@ -1,3 +1,7 @@
+body{
+	max-width: 960px;
+	margin: auto;
+}
 img.logo{	
     display: block;
     margin: 0 auto;
@@ -26,4 +30,14 @@ select{
 }
 .navbar-item img {
     max-height: 100%;
+}
+@media screen and (min-width: 960px){
+.navbar.is-fixed-bottom {
+    width: 48px;
+    margin: auto;
+}
+form{
+	    width: 460px;
+    margin: auto;
+}
 }
