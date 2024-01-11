@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" type="image/jpg" href="./img/logo.ico"/>
 		<meta name='robots' content='noindex, nofollow'/>
-    <title>Inventory Management | Deco Labels</title>
+    <title>Pick Order | Deco Labels</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 	<link rel="stylesheet" href="./css/deco-styles.css">
+	<script src="./js/deco-app.js"></script>
   </head>
   <body>
   <section class="section">
@@ -21,16 +22,95 @@
 		</div>		
     </div>
   </section>
-  <section class="section">
+  <section class="section py-0 px-1">
   <div class="container">
+		<div class="searchbox pb-4">
+			<div class="field has-addons">
+		  <div class="control search-box">
+			<input class="input" type="text" placeholder="Release Ticket Number">
+		  </div>
+		  <div class="control">
+			<a class="button is-info">
+			  Search
+			</a>
+		  </div>
+		</div>
+		  </div>
+		<div class="order-list table-container">
+			<table class="table is-bordered is-striped is-narrow is-fullwidth mb-1">
+			<thead>
+				<tr class="has-text-centered is-size-7-mobile">				  
+				  <th>DESCRIPTION</th>
+				  <th>ORDERED QTY</th>
+				  <th>PICKED QTY</th>
+				</tr>
+				
+			</thead>
+			<tbody>
+				<tr class="is-size-7-mobile">
+					<td>83043 00079 VODKA GRAPEFRUIT BIL NECK LABEL</td>
+					<td class="has-text-centered">15000</td>
+					<td class="has-text-centered">0</td>
+				</tr>
+				<tr class="is-size-7-mobile">
+					<td>4148896 IRR CHOCOLATE CHIP & BANANA  400G</td>
+					<td class="has-text-centered">26400</td>
+					<td class="has-text-centered">0</td>
+				</tr>
+			</tbody>
+		  </table> 
+			<div class="field has-text-right">
+				<button id="myBtn" class="button is-white has-text-weight-bold">[ + ]</button>
+			</div>
+		</div>
+		<div class="field has-text-centered my-6">
+			<button class="button is-primary is-medium">SUBMIT</button>
+		</div>
   </div>
-	
-
   </section>
   <nav class="navbar is-fixed-bottom" role="navigation" aria-label="main navigation">
 	<div class="navbar-item">    
 		<a class="" href="./index.html"><img class="home-icon image is-48x48" src="./img/home-icon.png" alt="HOME"/></a>
 	</div>
   </nav>
+  
+  <!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <form>
+		
+			<div class="field">
+			  <label class="label is-medium mb-0">TICKET:</label>
+			  <div class="control">
+				<input class="input is-medium" type="number" placeholder="">				
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label is-medium mb-0">NO. of BOX(ES):</label>
+			  <div class="control">
+				<input class="input is-medium" type="number" placeholder="" value="">				
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label is-medium mb-0">NO. of PART BOX:</label>
+			  <div class="control">
+				<input class="input is-medium" type="number" placeholder="" value="0">				
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label is-medium mb-0">QUANTITY:</label>
+			  <div class="control">
+				<input class="input is-medium" type="number" placeholder="">				
+			  </div>
+			</div>		
+			<div class="field has-text-centered my-6">
+				<button class="button is-success is-medium">ADD</button>
+			</div>
+	</form>
+  </div>
+</div>
+<!-- The Modal -->
   </body>
 </html>
