@@ -150,7 +150,9 @@
 		inventory.filter(function( item ) {
 		
 			if(item.ProductNumber == dpnNum){
-			//item.TicketNumber = '97228';
+			if(item.TicketNumber == ''){
+				item.TicketNumber = ' ';
+			}
 				resultHtml += '<div class="list-item px-0">'+
 											'<div class="list-item-content" id="' + item.TicketNumber + '">' +
 												'<div class="list-item-title">' +
