@@ -95,3 +95,38 @@ form{
     margin: 10% auto;
 }
 }
+
+.list {
+    color: #4a4a4a;
+    flex-direction: column;
+    display: flex;
+}
+.list-item:not(:last-child):not(.box) {
+    border-bottom: 1px solid #dbdbdb;
+}
+.list-item:not(.box) {
+    padding: 0.75em;
+}
+.list-item {
+    align-items: center;
+    transition: background-color .125s ease-out;
+    display: flex;
+    position: relative;
+}
+.list-item-content {
+    flex-direction: column;
+    flex-grow: 1;
+    display: flex;
+}
+.list-item-title {
+    color: #363636;
+    font-weight: 600;
+}
+.list-item-description {
+    color: #7a7a7a;
+}
+
+.list-item-controls {
+    flex-shrink: 0;
+    transition: opacity .125s ease-out;
+}
