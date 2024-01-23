@@ -35,7 +35,9 @@
 			  </div>
 			</div>
 		</div>
-		
+		<div class="loader-wrapper">
+              <div class="loader is-loading"></div>
+            </div>
 		<!-- list item -->	
 		
 		  <div class="table-container result-list" id="inventoryList" style="display:none;">
@@ -46,6 +48,7 @@
 				  <th>DESCRIPTION</th>
 				  <th>PHYSICAL</th>
 				  <th>AVAILABLE</th>
+				  <th>TICKET</th>
 				</tr>
 				
 			</thead>
@@ -68,25 +71,31 @@
   </body>
   <script>
   $('.search-ticket').click(function(){
+  $('.loader-wrapper').addClass('is-active');
 		var dpn = $('.search-box input').val();		
 		//var dpn = productNumber.split('DPN0')[1];
 		//console.log(inventory.length);
 		var resultHtml = '';
 		var count = 0;
 		inventory.filter(function( item ) {
-		
+		if(dpn == ''){dpn = 'DPN';}
 			if((item.ProductNumber).indexOf(dpn.toString()) > -1){
 				resultHtml += '<tr class="is-size-7-mobile">'+
 									'<td>' + item.ProductNumber + '</td>'+
 									'<td>' + item.Description + '</td>'+
 									'<td class="has-text-centered">' + item.Physical + '</td>'+
 									'<td class="has-text-centered">' + item.Available + '</td>'+
+									'<td class="has-text-centered">' + item.TicketNumber + '</td>'+
 								'</tr>';
 			count++;
 			}
 		}); 
-		console.log(count);
-		if(count > 0){
+		//console.log(count);
+		
+		setTimeout(function(){
+			$('.loader-wrapper').removeClass('is-active');
+			if(count > 0){
+			
 			$('.results').html(resultHtml);
 			$('.notification').css('display','none');
 			$('#inventoryList').css('display','block');
@@ -95,6 +104,9 @@
 			$('#inventoryList').css('display','none');
 			$('.notification').css('display','block');
 		}
+			
+		  }, 500);
+		
 			
 	});
 $('.delete').click(function(){

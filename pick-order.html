@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -35,12 +36,16 @@
 			  </div>
 			</div>
 		</div>
-		
+		<div class="loader-wrapper">
+              <div class="loader is-loading"></div>
+            </div>
 		<!-- list item -->
 		<div class="order-list">
+		<div class="">
 			<h1 class="is-size-4 has-text-weight-bold"></h1>
 		</div>
 		<div class="list release-ticket" id="releaseTicket" style="display:none;"></div>
+		</div>
 		<!-- list item -->
 		<div class="container" >		
 			<!-- <div class="field has-text-right">
@@ -75,6 +80,7 @@
 	  <div class="control">
 		<input class="input is-medium ordernumber" type="number" placeholder="">
 		<input class="input is-medium dpn" type="hidden">	
+		<input class="input is-medium releaseTicket" type="hidden">	
 	  </div>
 	</div>
 	<div class="field">
@@ -106,41 +112,52 @@
 <script>
 
 	$('.search-ticket').click(function(){
-		var ticketnum = $('.search-box input').val();		
-		$('.order-list h1').text("TICKET: "+ticketnum);
-		var resultHtml = '';
-		ordersToPick.filter(function( item ) {
-		
-			if(item.id == ticketnum){
-				resultHtml += '<div class="list-item row-'+item.row+'">'+
-											'<div class="list-item-content" id="'+item.product_number+'">'+
-												'<div class="list-item-title"><b>'+item.product_number+'</b> '+item.description+'</div>'+
-												'<div class="list-item-description">'+
-												'<span class="ordrqty">Order QTY: '+item.order_qty+ '</span>'+
-												'<span class="pqty px-2"></span>'+
-												'</div>'+
-												
-											'</div>'+
-											'<div class="list-item-controls">'+
-												'<div class="buttons is-right">'+
-													'<button class="button pick-item" onclick="showAvailableToPick(\''+item.product_number+'\',\'row-'+item.row+'\')">'+
-														'<span class="icon is-small">'+
-															'<i class="fas fa-edit has-text-weight-bold">+</i>'+
-														'</span>'+
-														'<span>Pick</span>'+
-													'</button> '+
-												'</div>'+
-											'</div>'+
-										 '</div>';
-			
+	
+		var ticketnum = $('.search-box input').val();
+			if(ticketnum != ''){
+				var resultHtml = '';
+				$('.loader-wrapper').addClass('is-active');
+				ordersToPick.filter(function( item ) {
+				
+					if(item.id == ticketnum){
+						resultHtml += '<div class="list-item row-'+item.row+'">'+
+													'<div class="list-item-content" id="'+item.product_number+'">'+
+														'<div class="list-item-title"><b>'+item.product_number+'</b> '+item.description+'</div>'+
+														'<div class="list-item-description">'+
+														'<span class="ordrqty">Order QTY: '+item.order_qty+ '</span>'+
+														'<span class="pqty px-2"></span>'+
+														'</div>'+
+														
+													'</div>'+
+													'<div class="list-item-controls noprint">'+
+														'<div class="buttons is-right">'+
+															'<button class="button pick-item" onclick="showAvailableToPick(\''+item.product_number+'\',\'row-'+item.row+'\')">'+
+																'<span class="icon is-small">'+
+																	'<i class="fas fa-edit has-text-weight-bold">+</i>'+
+																'</span>'+
+																'<span>Pick</span>'+
+															'</button> '+
+														'</div>'+
+													'</div>'+
+												 '</div>';
+					
+					
+					}
+				}); 
+				
+				setTimeout(function(){
+					$('.order-list h1').text("TICKET: "+ticketnum);
+					$('.loader-wrapper').removeClass('is-active');
+					$('.release-ticket').html(resultHtml);
+					$('#releaseTicket').css('display','block');
+					$('.submit-release-order').css('display','block');
+				}, 1000);
+			}else{
+				alert("Please enter Release Ticket Number.");
 			
 			}
-		}); 
 		
 		
-			$('.release-ticket').html(resultHtml);
-			$('#releaseTicket').css('display','block');
-			$('.submit-release-order').css('display','block');
 	});
 	
 	
@@ -220,7 +237,7 @@
 	var noOfBox = $('#addItemModal .noOfBox').val();
 	var noOfPartBox = $('#addItemModal .noOfPartBox').val();
 	var dpn = $('#addItemModal .dpn').val();
-	var oqty = $('#'+dpn+' .ordrqty').text();
+	var oqty = $('.'+rown+' #'+dpn+' .ordrqty').text();
 	var isOk = false;
 	if(dpn.indexOf('LOB') <= -1){
 		if(checkQty(parseInt(oqty.replace('Order QTY: ','')),pickedQty)){
@@ -253,60 +270,44 @@
 	
 	if(isOk){
 		//alert('submit form');
-		$('#addItemModal').css('display','none');
-	}
-	
-	
-	 //var ticketnum = $('.ordernumber').val();	
-      /*
+		//?action=insert&table=order_picked&data={"name":"John Doe"}
+		var releaseTicket = $('.order-list h1').text();
+		var datePicked = new Date();
+		var data = {"ReleaseTicket":releaseTicket.replace("TICKET: ",""),
+					"TicketNumber":ticketnumber,
+					"ProductNumber":dpn,
+					"OrderQty":parseInt(oqty.replace('Order QTY: ','')),
+					"PickedQty":pickedQty,
+					"NoOfBox":noOfBox,
+					"NoOfPartBox":noOfPartBox,
+					"DatePicked":datePicked
+					};
+					console.log(data);
 		$.ajax({
 		headers: {'Accept' : 'application/json'},
 		type: 'GET',
-		url: "https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec?action=read&table=open_orders&id="+ticketnum,
+		url: 'https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec??action=insert&table=order_picked&data='+data+'',
 		beforeSend: function(xhr){
 		xhr.withCredentials = true;
 		},
 		success: function (response, textStatus, request){
 		
-		var pqty = $('.picked_qty').val();
-		var resultHtml = '';
-			for(var i=0; i<response.data.length;i++){
-				var dpn = (response.data[i].description).substring(0,9);
-				var custid = response.data[i].customerid;
+			if(response.success){
+				console.log(response);
 				
-				if($('.release-ticket tr').hasClass(custid + '' + dpn)){
-					var oqty = $('.' + custid + '' + dpn +' .order-qty').text();
-					
-					if(pqty > oqty){
-						if (confirm('The quantity you entered is greater than the ordered quantity. Are you sure to ship the over?')) {
-							//send to record...
-							$('.' + custid + '' + dpn +' .pick-qty').text(pqty);
-							//close the pop up window.
-							$('.modal-content .close').click();
-						} else {
-							// change the quantity
-						}			
-						
-					}else{
-						//send to record...
-							$('.' + custid + '' + dpn +' .pick-qty').text(pqty);
-							//close the pop up window.
-							if(pqty < oqty){
-								$('.' + custid + '' + dpn +' .pick-qty').addClass('has-text-danger-dark');
-							}
-							$('.modal-content .close').click();
-					
-					}
-				}else{
-					alert("TicketNumber " + $('.ordernumber').val() + " " + dpn +"  is not part of the order!");
-					$('.modal-content input').val("");
-					
-				}
-				
-			}
-			
+			}else{
+			    //alert('No data available...');
+			}		
 		}
-		});*/
+		});
+		
+		
+		
+		$('#addItemModal').css('display','none');
+	}
+	
+	
+	 
 	});
 	
 	$('.submit-release-order').click(function(){
