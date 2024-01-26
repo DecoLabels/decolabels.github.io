@@ -93,7 +93,24 @@
 					$('.notification').css('display','block');
 				}		
 			}
-		});			
+		});	
+
+
+$.ajax({
+		headers: {'Accept' : 'application/json'},
+		type: 'GET',
+		url: "https://script.google.com/macros/s/AKfycbxj3ydLp6zVBML5lRL8d5O7SpwytGQP3YMwIlhGgOBDhurtGXebv6PCVDMP6lBmtign/exec?email=test@test.com",		
+		beforeSend: function(xhr){
+		xhr.withCredentials = true;
+		},
+		success: function (response, textStatus, request){
+			alert("done.");
+		}
+		});	
+
+
+
+		
 	});	
 	$('.delete').click(function(){
 		$('.notification').css('display','none');

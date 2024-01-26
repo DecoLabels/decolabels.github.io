@@ -273,20 +273,22 @@
 		//?action=insert&table=order_picked&data={"name":"John Doe"}
 		var releaseTicket = $('.order-list h1').text();
 		var datePicked = new Date();
-		var data = {"ReleaseTicket":releaseTicket.replace("TICKET: ",""),
+		var data = {
+					"DatePicked":datePicked.toLocaleString(),
+					"ReleaseTicket":releaseTicket.replace("TICKET: ",""),
 					"TicketNumber":ticketnumber,
 					"ProductNumber":dpn,
 					"OrderQty":parseInt(oqty.replace('Order QTY: ','')),
 					"PickedQty":pickedQty,
 					"NoOfBox":noOfBox,
-					"NoOfPartBox":noOfPartBox,
-					"DatePicked":datePicked
+					"NoOfPartBox":noOfPartBox
 					};
 					console.log(data);
 		$.ajax({
 		headers: {'Accept' : 'application/json'},
 		type: 'GET',
-		url: 'https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec??action=insert&table=order_picked&data='+data+'',
+		url: 'https://script.google.com/macros/s/AKfycbzXbaBEAjsSz2rgh-vQyFVpUc88ZzYTMiwhM2O1iyj5Fe1HGe1BsNxYOzv0O2IPe9b-/exec',
+		data: data,
 		beforeSend: function(xhr){
 		xhr.withCredentials = true;
 		},
@@ -301,7 +303,7 @@
 		}
 		});
 		
-		
+	
 		
 		$('#addItemModal').css('display','none');
 	}
