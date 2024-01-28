@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" type="image/jpg" href="./img/logo.ico"/>
 		<meta name='robots' content='noindex, nofollow'/>
-    <title>Inventory Management | Deco Labels</title>
+    <title>View Stock (Box) | Deco Labels</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 	<link rel="stylesheet" href="./css/deco-styles.css">
 	<script src="./js/jquery-3.6.0.min.js"></script>
-	<script src="./js/deco-app.js"></script>
-	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.js"></script>
   </head>
   <body>
   <section class="section">
@@ -18,103 +16,46 @@
       <div class="columns is-centered">
 		  		  <div class="column is-half p-0">
 			<a class="" href="./index.html">
-			  <img class="logo" src="./img/deco-logo.jpg" alt="Deco Labels"/>
+			  <img class="logo" src="./img/Logo.webp" alt="Deco Labels"/>
 			</a>
 		  </div>
 		</div>		
     </div>
   </section>
- <section class="section py-0 px-1">
-		<div class="loader-wrapper">
-              <div class="loader is-loading"></div>
-            </div>
-		
-		<!-- list item -->	
-		
-		  <div class="table-container result-list" id="inventoryList" style="display:none;">
-		  <table class="table is-bordered is-striped is-narrow is-fullwidth">
+  <section class="section py-0">
+  <div class="container">
+	<div class="table-container">
+		  <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
 			<thead>
-				<tr class="has-text-centered is-size-7-mobile">				  
+				<tr class="has-text-centered">				  
 				  <th>BOX SIZE</th>
 				  <th>QUANTITY</th>
-				  <th>USAGE</th>
-				  <th>AVAILABLE</th>				  
 				</tr>
 				
 			</thead>
-			<tbody class="results">				
+			<tbody>
+				<tr>
+					<td>10 x 10 x 9</td>
+					<td class="has-text-centered">2000</td>
+				</tr>
+				<tr>
+					<td>10 x 10 x 19</td>
+					<td class="has-text-centered">2000</td>
+				</tr>
 			</tbody>
-		  </table>		  
+		  </table>
 		</div>
-		<div class="notification is-danger" style="display:none;">
-			  <button class="delete"></button>
-			  <span class="no-results"></span>
-			</div>
-		<!-- list item -->		
+  
+  
+  </div>
+	
+	
   </section>
   <nav class="navbar is-fixed-bottom" role="navigation" aria-label="main navigation">
 	<div class="navbar-item">    
 		<a class="" href="./index.html"><img class="home-icon image is-48x48" src="./img/home-icon.png" alt="HOME"/></a>
 	</div>
   </nav>
+  
   </body>
-  <script>
-  $(document).ready(function(){
-		$('.loader-wrapper').addClass('is-active');
-		$.ajax({
-		headers: {'Accept' : 'application/json'},
-		type: 'GET',
-		url: "https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec?action=read&table=Box_Inventory",
-		beforeSend: function(xhr){
-		xhr.withCredentials = true;
-		},
-		success: function (response, textStatus, request){
-		 $('.loader-wrapper').removeClass('is-active');
-			if(response.success){			
-				var resultHtml = '';
-					for(var i=0;i<response.data.length;i++){
-						resultHtml += '<tr class="is-size-7-mobile">'+
-											'<td>' + response.data[i].BoxSize + '</td>'+
-											'<td>' + response.data[i].Quantity + '</td>'+
-											'<td class="has-text-centered">' + response.data[i].Usage + '</td>'+
-											'<td class="has-text-centered">' + response.data[i].Available + '</td>'+											
-										'</tr>';
-					
-				
-					}	
-				
-					
-					$('.results').html(resultHtml);
-					$('.result-list').css('display','block');	
-					$('.notification').css('display','none');				
-				
-				}else{
-					$('.no-results').text("Oppsss.., No data available.");					
-					$('.notification').css('display','block');
-				}		
-			}
-		});	
-
-
-$.ajax({
-		headers: {'Accept' : 'application/json'},
-		type: 'GET',
-		url: "https://script.google.com/macros/s/AKfycbxj3ydLp6zVBML5lRL8d5O7SpwytGQP3YMwIlhGgOBDhurtGXebv6PCVDMP6lBmtign/exec?email=test@test.com",		
-		beforeSend: function(xhr){
-		xhr.withCredentials = true;
-		},
-		success: function (response, textStatus, request){
-			alert("done.");
-		}
-		});	
-
-
-
-		
-	});	
-	$('.delete').click(function(){
-		$('.notification').css('display','none');
-	}); 
-	
-  </script>
 </html>
