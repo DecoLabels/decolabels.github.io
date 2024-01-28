@@ -12,6 +12,7 @@
 	<script src="./js/jquery-3.6.0.min.js"></script>
 	<script src="./js/deco-app.js"></script>
 	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.js"></script>
+	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.js"></script>
   </head>
   <body>
   <section class="section">
@@ -29,7 +30,7 @@
 		<div class="searchbox pb-4">
 			<div class="field has-addons">
 			  <div class="control search-box">
-				<input class="input" type="number" placeholder="Release Ticket Number" inputmode="numeric" pattern="[0-9]*">
+				<input id="barcode-scanner" class="input" type="number" placeholder="Release Ticket Number" inputmode="numeric" pattern="[0-9]*">
 			  </div>
 			  <div class="control">
 				<a class="button is-info search-ticket">Search</a>
@@ -325,6 +326,36 @@
 		}	
 	
 	});
+	
+	
+	Quagga.init({           
+        inputStream : {
+            name : "Live",
+            type : "LiveStream",
+            target: document.querySelector('#barcode-scanner'), 
+             constraints: {
+                width: 520,
+                height: 400,                  
+                facingMode: "user"  //"environment" for back camera, "user" front camera
+                }               
+        },                         
+        decoder : {
+            readers : ["code_128_reader","code_39_reader"]
+        }
+
+    }, function(err) {
+         if (err) {
+            console.log(err);
+            return
+        }
+
+        Quagga.start();
+
+        Quagga.onDetected(function(result) {                              
+                var last_code = result.codeResult.code;                   
+                   alert("last_code "); 
+             });
+    });
 </script>
   </body>
 </html>
