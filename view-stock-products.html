@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 	<link rel="stylesheet" href="./css/deco-styles.css">
 	<script src="./js/jquery-3.6.0.min.js"></script>
+	<script src="./js/deco-app.js"></script>
+	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.js"></script>
   </head>
   <body>
   <section class="section">
@@ -16,27 +18,29 @@
       <div class="columns is-centered">
 		  		  <div class="column is-half p-0">
 			<a class="" href="./index.html">
-			  <img class="logo" src="./img/Logo.webp" alt="Deco Labels"/>
+			  <img class="logo" src="./img/deco-logo.jpg" alt="Deco Labels"/>
 			</a>
 		  </div>
 		</div>		
     </div>
   </section>
-  <section class="section py-0 px-1">
-  <div class="container">
-  <div class="searchbox pb-4">
-	<div class="field has-addons">
-  <div class="control search-box">
-    <input class="input" type="text" placeholder="Filter">
-  </div>
-  <div class="control">
-    <a class="button is-info">
-      Search
-    </a>
-  </div>
-</div>
-  </div>
-  <div class="table-container">
+ <section class="section py-0 px-1">
+		<div class="searchbox pb-4">
+			<div class="field has-addons">
+			  <div class="control search-box">
+				<input class="input" type="text" placeholder="DPN Number">
+			  </div>
+			  <div class="control">
+				<a class="button is-info search-ticket">Search</a>
+			  </div>
+			</div>
+		</div>
+		<div class="loader-wrapper">
+              <div class="loader is-loading"></div>
+            </div>
+		<!-- list item -->	
+		
+		  <div class="table-container result-list" id="inventoryList" style="display:none;">
 		  <table class="table is-bordered is-striped is-narrow is-fullwidth">
 			<thead>
 				<tr class="has-text-centered is-size-7-mobile">				  
@@ -44,28 +48,20 @@
 				  <th>DESCRIPTION</th>
 				  <th>PHYSICAL</th>
 				  <th>AVAILABLE</th>
+				  <th>TICKET</th>
 				</tr>
 				
 			</thead>
-			<tbody>
-				<tr class="is-size-7-mobile">
-					<td>BLA005DPN030330</td>
-					<td>83043 00079 VODKA GRAPEFRUIT BIL NECK LABEL</td>
-					<td class="has-text-centered">15000</td>
-					<td class="has-text-centered">15000</td>
-				</tr>
-				<tr class="is-size-7-mobile">
-					<td>FGF001DPN030770</td>
-					<td>4148896 IRR CHOCOLATE CHIP & BANANA  400G</td>
-					<td class="has-text-centered">26400</td>
-					<td class="has-text-centered">26400</td>
-				</tr>
+			<tbody class="results">
+				
 			</tbody>
-		  </table>
+		  </table>		  
 		</div>
-  </div>
-	
-
+		<div class="notification is-danger" style="display:none;">
+			  <button class="delete"></button>
+			  <span class="no-results"></span>
+			</div>
+		<!-- list item -->		
   </section>
   <nav class="navbar is-fixed-bottom" role="navigation" aria-label="main navigation">
 	<div class="navbar-item">    
@@ -73,4 +69,50 @@
 	</div>
   </nav>
   </body>
+  <script>
+  $('.search-ticket').click(function(){
+  $('.loader-wrapper').addClass('is-active');
+		var dpn = $('.search-box input').val();		
+		//var dpn = productNumber.split('DPN0')[1];
+		//console.log(inventory.length);
+		var resultHtml = '';
+		var count = 0;
+		inventory.filter(function( item ) {
+		if(dpn == ''){dpn = 'DPN';}
+			if((item.ProductNumber).indexOf(dpn.toString()) > -1){
+				resultHtml += '<tr class="is-size-7-mobile">'+
+									'<td>' + item.ProductNumber + '</td>'+
+									'<td>' + item.Description + '</td>'+
+									'<td class="has-text-centered">' + item.Physical + '</td>'+
+									'<td class="has-text-centered">' + item.Available + '</td>'+
+									'<td class="has-text-centered">' + item.TicketNumber + '</td>'+
+								'</tr>';
+			count++;
+			}
+		}); 
+		//console.log(count);
+		
+		setTimeout(function(){
+			$('.loader-wrapper').removeClass('is-active');
+			if(count > 0){
+			
+			$('.results').html(resultHtml);
+			$('.notification').css('display','none');
+			$('#inventoryList').css('display','block');
+		}else{
+			$('.no-results').text("No stock available for DPN0" + dpn + ".");
+			$('#inventoryList').css('display','none');
+			$('.notification').css('display','block');
+		}
+			
+		  }, 500);
+		
+			
+	});
+$('.delete').click(function(){
+$('.notification').css('display','none');
+
+});
+	
+  </script>
 </html>

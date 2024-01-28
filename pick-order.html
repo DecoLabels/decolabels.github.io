@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -10,6 +11,7 @@
 	<link rel="stylesheet" href="./css/deco-styles.css">
 	<script src="./js/jquery-3.6.0.min.js"></script>
 	<script src="./js/deco-app.js"></script>
+	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.js"></script>
   </head>
   <body>
   <section class="section">
@@ -17,55 +19,42 @@
       <div class="columns is-centered">
 		  		  <div class="column is-half p-0">
 			<a class="" href="./index.html">
-			  <img class="logo" src="./img/Logo.webp" alt="Deco Labels"/>
+			  <img class="logo" src="./img/deco-logo.jpg" alt="Deco Labels"/>
 			</a>
 		  </div>
 		</div>		
     </div>
   </section>
   <section class="section py-0 px-1">
-  <div class="container">
 		<div class="searchbox pb-4">
 			<div class="field has-addons">
-		  <div class="control search-box">
-			<input class="input" type="text" placeholder="Release Ticket Number">
-		  </div>
-		  <div class="control">
-			<a class="button is-info search-ticket">Search</a>
-		  </div>
-		</div>
-		  </div>
-		<div class="order-list table-container">
-			<table class="table is-bordered is-striped is-narrow is-fullwidth mb-1">
-			<thead>
-				<tr class="has-text-centered is-size-7-mobile">				  
-				  <th>DESCRIPTION</th>
-				  <th>ORDERED QTY</th>
-				  <th>PICKED QTY</th>
-				</tr>
-				
-			</thead>
-			<tbody id="release-ticket">
-				<tr class="is-size-7-mobile">
-					<td>83043 00079 VODKA GRAPEFRUIT BIL NECK LABEL</td>
-					<td class="has-text-centered">15000</td>
-					<td class="has-text-centered">0</td>
-				</tr>
-				<tr class="is-size-7-mobile">
-					<td>4148896 IRR CHOCOLATE CHIP & BANANA  400G</td>
-					<td class="has-text-centered">26400</td>
-					<td class="has-text-centered">0</td>
-				</tr>
-			</tbody>
-		  </table> 
-			<div class="field has-text-right">
-				<button id="myBtn" class="button is-white has-text-weight-bold">[ + ]</button>
+			  <div class="control search-box">
+				<input class="input" type="text" placeholder="Release Ticket Number">
+			  </div>
+			  <div class="control">
+				<a class="button is-info search-ticket">Search</a>
+			  </div>
 			</div>
 		</div>
-		<div class="field has-text-centered my-6">
-			<button class="button is-primary is-medium">SUBMIT</button>
+		<div class="loader-wrapper">
+              <div class="loader is-loading"></div>
+            </div>
+		<!-- list item -->
+		<div class="order-list">
+		<div class="">
+			<h1 class="is-size-4 has-text-weight-bold"></h1>
 		</div>
-  </div>
+		<div class="list release-ticket" id="releaseTicket" style="display:none;"></div>
+		</div>
+		<!-- list item -->
+		<div class="container" >		
+			<!-- <div class="field has-text-right">
+					<button id="myBtn" class="button is-white has-text-weight-bold">[ + ]</button>
+				 </div>-->
+			<div class="field has-text-centered mt-6 submit-release-order" style="margin-bottom:8rem;display:none;">
+					<button class="button is-primary is-medium">PRINT</button>
+			</div>			
+		</div>
   </section>
   <nav class="navbar is-fixed-bottom" role="navigation" aria-label="main navigation">
 	<div class="navbar-item">    
@@ -74,62 +63,268 @@
   </nav>
   
   <!-- The Modal -->
-<div id="myModal" class="modal">
-  <!-- Modal content -->
+<div id="showAvailableModal" class="modal">
+<div class="modal-background" onclick="hideModal('#showAvailableModal')"></div>
+ <button class="modal-close is-large" aria-label="close" onclick="hideModal('#showAvailableModal')"></button>  
+  <div class="modal-content"></div>
+</div>
+ <!-- The Modal -->
+ 
+ <!-- The Modal -->
+<div id="addItemModal" class="modal">
+<div class="modal-background" onclick="hideModal('#addItemModal')"></div>
+ <button class="modal-close is-large" aria-label="close" onclick="hideModal('#addItemModal')"></button>  
   <div class="modal-content">
-    <span class="close">&times;</span>
-    <form>
-		
-			<div class="field">
-			  <label class="label is-medium mb-0">TICKET:</label>
-			  <div class="control">
-				<input class="input is-medium" type="number" placeholder="">				
-			  </div>
-			</div>
-			<div class="field">
-			  <label class="label is-medium mb-0">NO. of BOX(ES):</label>
-			  <div class="control">
-				<input class="input is-medium" type="number" placeholder="" value="">				
-			  </div>
-			</div>
-			<div class="field">
-			  <label class="label is-medium mb-0">NO. of PART BOX:</label>
-			  <div class="control">
-				<input class="input is-medium" type="number" placeholder="" value="0">				
-			  </div>
-			</div>
-			<div class="field">
-			  <label class="label is-medium mb-0">QUANTITY:</label>
-			  <div class="control">
-				<input class="input is-medium" type="number" placeholder="">				
-			  </div>
-			</div>		
-			<div class="field has-text-centered my-6">
-				<button class="button is-success is-medium">ADD</button>
-			</div>
-	</form>
+	<div class="field">
+	  <label class="label is-medium mb-0">TICKET:</label>
+	  <div class="control">
+		<input class="input is-medium ordernumber" type="number" placeholder="">
+		<input class="input is-medium dpn" type="hidden">	
+		<input class="input is-medium releaseTicket" type="hidden">	
+	  </div>
+	</div>
+	<div class="field">
+	  <label class="label is-medium mb-0">NO. of BOX(ES):</label>
+	  <div class="control">
+		<input class="input is-medium noOfBox" type="number" placeholder="" value="">				
+	  </div>
+	</div>
+	<div class="field">
+	  <label class="label is-medium mb-0">NO. of PART BOX:</label>
+	  <div class="control">
+		<input class="input is-medium noOfPartBox" type="number" placeholder="" value="0">				
+	  </div>
+	</div>
+	<div class="field">
+	  <label class="label is-medium mb-0">QUANTITY:</label>
+	  <div class="control">
+		<input class="input is-medium picked_qty" type="number" placeholder="">	
+		<input class="input is-medium rownumber" type="hidden">	
+	  </div>
+	</div>		
+	<div class="field has-text-centered my-6">
+		<button class="button is-success is-medium add-item-button">ADD</button>
+	</div>
   </div>
 </div>
-<!-- The Modal -->
+ <!-- The Modal --> 
+
 <script>
 
 	$('.search-ticket').click(function(){
-	 var ticketnum = $('.search-box input').val();
-		$.ajax({
-					url: 'https://script.google.com/macros/s/AKfycbxSgNM9wfQny5dfqMQdJVriozDoyyw3NHmfgmBM8f6L/dev?action=read&table=order_to_pick&id='+ticketnum,
-					type: 'get',
-					dataType: 'application/json',
-					//data: 'action=read&table=order_to_pick&id='+ticketnum,
-					success: function(data) {
-						console.log(data.success);
+	
+		var ticketnum = $('.search-box input').val();
+			if(ticketnum != ''){
+				var resultHtml = '';
+				$('.loader-wrapper').addClass('is-active');
+				ordersToPick.filter(function( item ) {
+				
+					if(item.id == ticketnum){
+						resultHtml += '<div class="list-item row-'+item.row+'">'+
+													'<div class="list-item-content" id="'+item.product_number+'">'+
+														'<div class="list-item-title"><b>'+item.product_number+'</b> '+item.description+'</div>'+
+														'<div class="list-item-description">'+
+														'<span class="ordrqty">Order QTY: '+item.order_qty+ '</span>'+
+														'<span class="pqty px-2"></span>'+
+														'</div>'+
+														
+													'</div>'+
+													'<div class="list-item-controls noprint">'+
+														'<div class="buttons is-right">'+
+															'<button class="button pick-item" onclick="showAvailableToPick(\''+item.product_number+'\',\'row-'+item.row+'\')">'+
+																'<span class="icon is-small">'+
+																	'<i class="fas fa-edit has-text-weight-bold">+</i>'+
+																'</span>'+
+																'<span>Pick</span>'+
+															'</button> '+
+														'</div>'+
+													'</div>'+
+												 '</div>';
+					
+					
 					}
-				});
-	 
-	 
-	 //console.log(ticketnum);
+				}); 
+				
+				setTimeout(function(){
+					$('.order-list h1').text("TICKET: "+ticketnum);
+					$('.loader-wrapper').removeClass('is-active');
+					$('.release-ticket').html(resultHtml);
+					$('#releaseTicket').css('display','block');
+					$('.submit-release-order').css('display','block');
+				}, 1000);
+			}else{
+				alert("Please enter Release Ticket Number.");
+			
+			}
+		
+		
 	});
-
-
+	
+	
+	function showAvailableToPick(dpnNum,rownum){					
+		var resultHtml = '';		
+		var count = 0;
+		inventory.filter(function( item ) {
+		
+			if(item.ProductNumber == dpnNum){
+			if(item.TicketNumber == ''){
+				item.TicketNumber = ' ';
+			}
+				resultHtml += '<div class="list-item px-0">'+
+											'<div class="list-item-content" id="' + item.TicketNumber + '">' +
+												'<div class="list-item-title">' +
+													'<b>Ticket: ' + item.TicketNumber + '</b>' +
+													'<span class="px-2">DPN: ' + item.ProductNumber + '</span>' +													
+												'</div>' +
+												'<div class="list-item-description">' +
+													'<span>Physical: ' + item.Physical + '</span>' +
+													'<span class="px-2">Available: ' + item.Available + '</span>' +
+												'</div>' +
+											'</div>' +
+											'<div class="list-item-controls">' +
+												'<div class="buttons is-right">' +
+													'<button class="button pick-item" onclick="addToPick(\'' + item.TicketNumber + '\',\''  + item.ProductNumber + '\',' + item.Available + ',\''+rownum+'\')">' +
+														'<span>ADD</span>' +
+													'</button>' +
+												'</div>'  +
+											'</div>' +
+										 '</div>';
+			
+			count++;
+			}
+		}); 
+		
+		$('#showAvailableModal .modal-content').html(resultHtml);				
+		$('#showAvailableModal').css('display','block');
+	}
+	
+	function addToPick(tktnum, dpn, qty, rownum){
+	
+		$('#showAvailableModal').css('display','none');
+		$('#addItemModal .ordernumber').val(tktnum);
+		$('#addItemModal .dpn').val(dpn);
+		$('#addItemModal .rownumber').val(rownum);
+		
+		if(dpn.indexOf('LOB') <= -1){
+			
+			$('#addItemModal .picked_qty').val(qty);
+		}else{
+			$('#addItemModal .noOfBox').val(qty);
+		}
+		$('#addItemModal').css('display','block');
+		
+	}
+	
+	function checkQty(ordered, picked){
+		if(picked > ordered){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+	
+	function hideModal(ele){
+		$(ele).css('display','none');
+	}
+	
+	
+	
+	$('.add-item-button').click(function(){
+	var rown = $('#addItemModal .rownumber').val();
+	var ticketnumber = $('#addItemModal .ordernumber').val();
+	var pickedQty = $('#addItemModal .picked_qty').val();
+	var noOfBox = $('#addItemModal .noOfBox').val();
+	var noOfPartBox = $('#addItemModal .noOfPartBox').val();
+	var dpn = $('#addItemModal .dpn').val();
+	var oqty = $('.'+rown+' #'+dpn+' .ordrqty').text();
+	var isOk = false;
+	if(dpn.indexOf('LOB') <= -1){
+		if(checkQty(parseInt(oqty.replace('Order QTY: ','')),pickedQty)){
+			$('.'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+pickedQty);	
+				isOk = true;
+		}else{
+			if (confirm("Are you sure to ship over? Ordered quantity is "+parseInt(oqty.replace('Order QTY: ','')))) {
+			 $('.'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+pickedQty);	
+			  isOk = true;
+			} 
+			
+		}
+		
+	}else{
+	
+		if(checkQty(parseInt(oqty.replace('Order QTY: ','')),noOfBox)){
+			$('.'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+noOfBox);
+			isOk = true;
+		}else{
+			if (confirm("Are you sure to ship over? Ordered quantity is "+parseInt(oqty.replace('Order QTY: ','')))) {
+			  $('.'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+noOfBox);	
+			  isOk = true;
+			} 
+		}
+		
+				
+		
+	}
+		
+	
+	if(isOk){
+		//alert('submit form');
+		//?action=insert&table=order_picked&data={"name":"John Doe"}
+		var releaseTicket = $('.order-list h1').text();
+		var datePicked = new Date();
+		var data = {
+					"Timestamp":datePicked.toLocaleString(),
+					"ReleaseTicket":releaseTicket.replace("TICKET: ",""),
+					"TicketNumber":ticketnumber,
+					"ProductNumber":dpn,
+					"OrderQty":parseInt(oqty.replace('Order QTY: ','')),
+					"PickedQty":pickedQty,
+					"NoOfBox":noOfBox,
+					"NoOfPartBox":noOfPartBox,
+					"sheet":"picked_data"
+					};
+					//console.log(data);
+		$.ajax({
+		headers: {'Accept' : 'application/json'},
+		type: 'GET',
+		url: 'https://script.google.com/macros/s/AKfycbxmT7-9SveuiVmVwVy-7Mnnz6DiafNrn-KnX7ADCV47h07b-MV_LjRWMWL80GLy8bLd/exec',
+		data: data,
+		beforeSend: function(xhr){
+		xhr.withCredentials = true;
+		},
+		success: function (response, textStatus, request){
+		
+			if(response.success){
+				//console.log(response);
+				
+			}else{
+			    //alert('No data available...');
+			}		
+		}
+		});
+		
+	
+		
+		$('#addItemModal').css('display','none');
+	}
+	
+	
+	 
+	});
+	
+	$('.submit-release-order').click(function(){
+		if (confirm('Do you want to print the pick order report?')) {
+			//print the order
+			$('.order-list').print();
+		} else {
+			$('.search-box input').val("");
+			$('.release-ticket').html("");
+			$('.order-list h1').text("");
+			$('#releaseTicket').css('display','none');
+		}	
+	
+	});
 </script>
   </body>
 </html>
