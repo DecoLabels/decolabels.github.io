@@ -13,6 +13,7 @@
 	<script src="./js/deco-app.js"></script>
 	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.js"></script>
 	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.js"></script>
+	<script src="./js/index.js"></script>
   </head>
   <body>
   <section class="section">
@@ -37,6 +38,8 @@
 				<a class="button is-info search-ticket">Search</a>
 			  </div>
 			</div>
+			<button type="button" class="icon-barcode button scan">Start Scanning</button>
+			<ul class="results"></ul>
 		</div>
 		<div class="loader-wrapper">
               <div class="loader is-loading"></div>
@@ -110,7 +113,12 @@
   </div>
 </div>
  <!-- The Modal --> 
-
+<div class="overlay overlay--inline">
+        <div class="overlay__content">
+            <div class="overlay__close">X</div>
+            <ul class="results"></ul>
+        </div>
+    </div>
 <script>
 
 	$('.search-ticket').click(function(){
@@ -329,34 +337,7 @@
 	});
 	
 	
-	Quagga.init({           
-        inputStream : {
-            name : "Live",
-            type : "LiveStream",
-            target: document.querySelector('#barcode-scanner'), 
-             constraints: {
-                width: 520,
-                height: 400,                  
-                facingMode: "user"  //"environment" for back camera, "user" front camera
-                }               
-        },                         
-        decoder : {
-            readers : ["code_128_reader","code_39_reader"]
-        }
-
-    }, function(err) {
-         if (err) {
-            console.log(err);
-            return
-        }
-
-        Quagga.start();
-
-        Quagga.onDetected(function(result) {                              
-                var last_code = result.codeResult.code;                   
-                   alert("last_code "); 
-             });
-    });
+	
 </script>
   </body>
 </html>
