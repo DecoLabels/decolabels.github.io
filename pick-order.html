@@ -13,7 +13,7 @@
 	<script src="./js/deco-app.js"></script>
 	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.js"></script>
 	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.js"></script>
-	<script src="./js/index.js"></script>
+	<!-- <script src="./js/index.js"></script> -->
   </head>
   <body>
   <section class="section">
@@ -27,6 +27,8 @@
 		</div>		
     </div>
   </section>
+ <!--  <button type="button" class="icon-barcode button scan">Start Scanning</button>
+			<ul class="results"></ul> -->
   <section class="section py-0 px-1">
 		<div class="searchbox pb-4">
 			<div class="field has-addons">
@@ -38,8 +40,7 @@
 				<a class="button is-info search-ticket">Search</a>
 			  </div>
 			</div>
-			<button type="button" class="icon-barcode button scan">Start Scanning</button>
-			<ul class="results"></ul>
+			
 		</div>
 		<div class="loader-wrapper">
               <div class="loader is-loading"></div>
@@ -113,12 +114,12 @@
   </div>
 </div>
  <!-- The Modal --> 
-<div class="overlay overlay--inline">
+<!-- <div class="overlay overlay--inline">
         <div class="overlay__content">
             <div class="overlay__close">X</div>
             <ul class="results"></ul>
         </div>
-    </div>
+    </div> -->
 <script>
 
 	$('.search-ticket').click(function(){
