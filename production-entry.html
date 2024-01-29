@@ -8,7 +8,10 @@
     <title>Inventory Management | Deco Labels</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 	<link rel="stylesheet" href="./css/deco-styles.css">
+	<link rel="stylesheet" href="./css/prism.css">
 	<script src="./js/jquery-3.6.0.min.js"></script>
+
+	
   </head>
   <body>
   <section class="section">
@@ -27,8 +30,9 @@
 		<form method="get" action="https://script.google.com/macros/s/AKfycbxmT7-9SveuiVmVwVy-7Mnnz6DiafNrn-KnX7ADCV47h07b-MV_LjRWMWL80GLy8bLd/exec">
 			<div class="field">
 			  <label class="label is-medium mb-0">TICKET:</label>
-			  <div class="control">
-				<input class="input is-medium" name="Ticket" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
+			  <div class="control input-field">
+				<input id="isbn" class="input is-medium isbn" name="Ticket" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">
+				<button type="button" class="icon-barcode button scan"></button>
 			  </div>
 			</div>
 			<div class="field">
@@ -98,4 +102,26 @@
 		<a class="footer-home" href="./index.html"><img class="home-icon image is-48x48" src="./img/home-icon.png" alt="HOME"/></a>
 	</footer>-->
   </body>
+   <script src="./js/quagga.js"></script>
+  <script src="./js/index.js"></script>
+ <script src="./js/prism.js"></script>
+ <script>
+ var metas = document.getElementsByTagName('meta');
+var i;
+if (navigator.userAgent.match(/iPhone/i)) {
+  for (i=0; i<metas.length; i++) {
+    if (metas[i].name == "viewport") {
+      metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+    }
+  }
+  document.addEventListener("gesturestart", gestureStart, false);
+}
+function gestureStart() {
+  for (i=0; i<metas.length; i++) {
+    if (metas[i].name == "viewport") {
+      metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+    }
+  }
+}
+</script>
 </html>

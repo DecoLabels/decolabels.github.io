@@ -1,13 +1,14 @@
 var Quagga = window.Quagga;
 var App = {
-    _lastResult: null,
+    _scanner: null,
     init: function() {
         this.attachListeners();
     },
     activateScanner: function() {
         var scanner = this.configureScanner('.overlay__content'),
             onDetected = function (result) {
-                this.addToResults(result);
+                document.querySelector('input.isbn').value = result.codeResult.code;
+                stop();
             }.bind(this),
             stop = function() {
                 scanner.stop();  // should also clear all event-listeners?
@@ -17,84 +18,64 @@ var App = {
             }.bind(this);
 
         this.showOverlay(stop);
-        console.log("activateScanner");
         scanner.addEventListener('detected', onDetected).start();
     },
-    addToResults: function(result) {
-        if (this._lastResult === result.codeResult.code) {
-            return;
-        }
-        this._lastResult = result.codeResult.code;
-        var resultSets = document.querySelectorAll('ul.results');
-
-        Array.prototype.slice.call(resultSets).forEach(function(resultSet) {
-            var li = document.createElement('li'),
-                format = document.createElement('span'),
-                code = document.createElement('span');
-
-            console.log(result);
-            li.className = "result";
-            format.className = "format";
-            code.className = "code";
-
-            li.appendChild(format);
-            li.appendChild(code);
-
-            format.appendChild(document.createTextNode(result.codeResult.format));
-            code.appendChild(document.createTextNode(result.codeResult.code));
-
-            resultSet.insertBefore(li, resultSet.firstChild);
-        });
-    },
     attachListeners: function() {
-        var button = document.querySelector('button.scan'),
-            self = this;
+        var self = this,
+            button = document.querySelector('.input-field input + button.scan');
 
-        button.addEventListener("click", function clickListener (e) {
+        button.addEventListener("click", function onClick(e) {
             e.preventDefault();
-            button.removeEventListener("click", clickListener);
+            button.removeEventListener("click", onClick);
             self.activateScanner();
         });
     },
     showOverlay: function(cancelCb) {
-        document.querySelector('.container .controls')
-            .classList.add('hide');
-        document.querySelector('.overlay--inline')
-            .classList.add('show');
-        var closeButton = document.querySelector('.overlay__close');
-        closeButton.addEventListener('click', function closeHandler() {
-            closeButton.removeEventListener("click", closeHandler);
-            cancelCb();
-        });
+        if (!this._overlay) {
+            var content = document.createElement('div'),
+                closeButton = document.createElement('div');
+
+            closeButton.appendChild(document.createTextNode('X'));
+            content.className = 'overlay__content';
+            closeButton.className = 'overlay__close';
+            this._overlay = document.createElement('div');
+            this._overlay.className = 'overlay';
+            this._overlay.appendChild(content);
+            content.appendChild(closeButton);
+            closeButton.addEventListener('click', function closeClick() {
+                closeButton.removeEventListener('click', closeClick);
+                cancelCb();
+            });
+            document.body.appendChild(this._overlay);
+        } else {
+            var closeButton = document.querySelector('.overlay__close');
+            closeButton.addEventListener('click', function closeClick() {
+                closeButton.removeEventListener('click', closeClick);
+                cancelCb();
+            });
+        }
+        this._overlay.style.display = "block";
     },
     hideOverlay: function() {
-        document.querySelector('.container .controls')
-            .classList.remove('hide');
-        document.querySelector('.overlay--inline')
-            .classList.remove('show');
-    },
-    querySelectedReaders: function() {
-        return Array.prototype.slice.call(document.querySelectorAll('.readers input[type=checkbox]'))
-            .filter(function(element) {
-                return !!element.checked;
-            })
-            .map(function(element) {
-                return element.getAttribute("name");
-            });
+        if (this._overlay) {
+            this._overlay.style.display = "none";
+        }
     },
     configureScanner: function(selector) {
-        var scanner = Quagga
-            .decoder({readers: ["code_128_reader","code_39_reader"]})
-            .locator({patchSize: 'medium'})
-            .fromSource({
-                target: selector,
-                constraints: {
-                    width: 600,
-                    height: 600,
-                    facingMode: "environment"
-                }
-            });
-        return scanner;
+        if (!this._scanner) {
+            this._scanner = Quagga
+                .decoder({readers: ['ean_reader','code_39_reader','code_128_reader']})
+                .locator({patchSize: 'medium'})
+                .fromSource({
+                    target: selector,
+                    constraints: {
+                        width: 800,
+                        height: 600,
+                        facingMode: "environment"
+                    }
+                });
+        }
+        return this._scanner;
     }
 };
 App.init();
