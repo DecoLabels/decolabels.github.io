@@ -274,14 +274,15 @@ i[class^="icon-"], i[class*=" icon-"] {
 .input-field{position: relative;}
 .icon-barcode{
 	border: 0;
-	position: absolute;
-	right: 3px;
-	top: 50%;
-	transform: translateY(-50%);
-	background-image: url('./img/barcode-scanning-icon.png');
-	background-color: transparent;
-    width: 32px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url(../img/barcode-icon.png);
+    background-color: transparent;
+    width: 45px;
     height: 32px;
+    background-repeat: no-repeat;
 }
 .overlay {
     overflow: hidden;
