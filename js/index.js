@@ -8,7 +8,7 @@ var App = {
         var scanner = this.configureScanner('.overlay__content'),
             onDetected = function (result) {
                 document.querySelector('input.isbn').value = result.codeResult.code;
-                 scanner.stop(); 
+                 stop(); 
 				
             }.bind(this),
             stop = function() {
