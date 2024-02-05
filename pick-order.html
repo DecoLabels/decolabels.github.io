@@ -235,9 +235,7 @@
 	}
 	
 	
-	function hideModal(ele){
-		$(ele).css('display','none');
-	}
+	
 	
 	
 	
@@ -299,12 +297,12 @@
 		$.ajax({
 		headers: {'Accept' : 'application/json'},
 		type: 'GET',
-		url: 'https://script.google.com/macros/s/AKfycbxmT7-9SveuiVmVwVy-7Mnnz6DiafNrn-KnX7ADCV47h07b-MV_LjRWMWL80GLy8bLd/exec',
+		url: 'https://script.google.com/macros/s/AKfycbyLXRqGjBgdGr-XRoWsxYc8-IKyLl7wcaSmMnC5q32HtE8mzxfZ9nnRjYZx-wbRQ5pK/exec',
 		data: data,
 		beforeSend: function(xhr){
 		xhr.withCredentials = true;
 		},
-		success: function (response, textStatus, request){
+		success: function (response){
 		
 			if(response.success){
 				//console.log(response);

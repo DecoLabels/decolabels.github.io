@@ -55,11 +55,36 @@
 		<a class="" href="./index.html"><img class="home-icon image is-48x48" src="./img/home-icon.png" alt="HOME"/></a>
 	</div>
   </nav>
+  
+  <!-- modal -->
+<div id="updateBoxModal" class="modal">
+<div class="modal-background" onclick="hideModal('#updateBoxModal')"></div>
+ <button class="modal-close is-large" aria-label="close" onclick="hideModal('#updateBoxModal')"></button>  
+  <div class="modal-content">
+	<div class="field">
+	  <label class="label is-medium mb-0">BOX SIZE:</label>
+	  <div class="control">
+		<input class="input is-medium boxsize" type="text" placeholder="">
+		<input class="input is-medium rownumber" type="hidden">		
+	  </div>
+	</div>	
+	<div class="field">
+	  <label class="label is-medium mb-0">QUANTITY:</label>
+	  <div class="control">
+		<input class="input is-medium updated_qty" type="number" placeholder="">	
+	  </div>
+	</div>		
+	<div class="field has-text-centered my-6">
+		<button class="button is-success is-medium updateBoxButton">UPDATE</button>
+	</div>
+  </div>
+</div>
+  <!-- modal -->
   </body>
   <script>
-  $(document).ready(function(){
-		$('.loader-wrapper').addClass('is-active');
-		$.ajax({
+  function loadBoxInventory(){
+	$('.loader-wrapper').addClass('is-active');
+	$.ajax({
 		headers: {'Accept' : 'application/json'},
 		type: 'GET',
 		url: "https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec?action=read&table=Box_Inventory",
@@ -72,11 +97,12 @@
 				var resultHtml = '';
 					for(var i=0;i<response.data.length;i++){
 						resultHtml += '<tr class="is-size-7-mobile">'+
-											'<td>' + response.data[i].BoxSize + '</td>'+
+											'<td><span class="is-vcentered">' + response.data[i].BoxSize + '</span></td>'+
 											//'<td>' + response.data[i].Quantity + '</td>'+
 											//'<td class="has-text-centered">' + response.data[i].Usage + '</td>'+
-											'<td class="has-text-centered">' + response.data[i].Available + 
-											'<button class="button is-small is-pulled-right">UPDATE</button></td>'+											
+											'<td class="has-text-centered"><span class="is-vcentred is-size-6">' + response.data[i].Available + '</span>'+ 
+											'<button class="button is-small is-pulled-right" onclick="updateBoxModal('+
+											  response.data[i].row + ',\'' + response.data[i].BoxSize + '\',' + response.data[i].Available + ')">UPDATE</button></td>'+											
 										'</tr>';
 					
 				
@@ -93,10 +119,55 @@
 				}		
 			}
 		});	
-
-
-		
+  
+  }
+  
+  $(document).ready(function(){		
+		loadBoxInventory();	
 	});	
+	
+	function updateBoxModal(row,boxsize,qty){
+		$('.rownumber').val(row);
+		$('.boxsize').val(boxsize);
+		$('.updated_qty').val(qty);
+		$('#updateBoxModal').css('display','block');	
+	}
+	
+	$('.updateBoxButton').click(function(){
+		var rownumber = $('.rownumber').val();
+		var boxsize = $('.boxsize').val();
+		var qty = $('.updated_qty').val();
+		var data = {
+					"action":"update",
+					"table":"Box_Inventory",
+					"row":rownumber,
+					"qty":qty
+					//"sheet":"box_data"
+					};
+		$.ajax({
+		headers: {'Accept' : 'application/json'},
+		type: 'GET',
+		url: "https://script.google.com/macros/s/AKfycbz_7PCkZQyupqnAf66Lr8wWbObjiEzu0xsvy76PEOakhstMHHLYwsFtulR_txRUDe22Xw/exec",
+		//url: "https://script.google.com/macros/s/AKfycby-0wREd2Ig9gPIXZMvkwk7vsnbLE-yk-gDvRCMR7Zl2rEQxUnHqOwWaRt0bZ050aOg/exec",
+		data: data,
+		beforeSend: function(xhr){
+		xhr.withCredentials = true;
+		},
+		success: function (data, statusText, jqXHR){
+		console.log(data);
+			if(statusText == 'success'){				
+				$('#updateBoxModal').css('display','none');
+				alert(boxsize + ' inventory is successfully updated!');
+				loadBoxInventory();	
+			}else{
+				alert('Ooppss.. Something went wrong. Please try again!');		
+			}
+		}
+		});	
+	});
+	
+	
+	
 	$('.delete').click(function(){
 		$('.notification').css('display','none');
 	}); 

@@ -41,6 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+function hideModal(ele){
+		$(ele).css('display','none');
+	}
+
 var ordersToPick = [];
 var inventory = [];
 $(document).ready(function(){

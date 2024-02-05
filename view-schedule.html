@@ -31,28 +31,35 @@
 		
 		<!-- list item -->	
 		
+		<div class="select is-fullwidth mb-5 is-danger">		
+		  <select>
+			<option value="">Select dropdown</option>
+			<option value="1">Press 1</option>
+			<option value="2">Press 4</option>
+			<option value="5">Press 5</option>
+			<option value="6">Press 6</option>
+			<option value="7">Press 7</option>
+			<option value="10">Press 10</option>
+			<option value="11">Press 11</option>
+		  </select>
+		</div>
+		<h2 class="is-title pressmachine"></h2>
 		  <div class="table-container result-list" id="inventoryList" style="display:none;">
-		  <table class="table is-bordered is-striped is-narrow is-fullwidth">
+		  <table class="table is-bordered is-striped is-fullwidth">
 			<thead>
 				<tr class="has-text-centered is-size-7-mobile">
-					<th>DATE RUN</th>
-				    <th>PRESS</th>				  
-				    <th>TICKET</th>
-				    <th>CUSTOMER</th>
-					<th>JOB NAME</th>
-					<th>HOURS</th>
+					<th>DATE RUN</th>				    		   
+					<th>JOB</th>					
 					<th>NOTES</th>
-				</tr>
-				
+				</tr>				
 			</thead>
-			<tbody class="results">				
-			</tbody>
+			<tbody class="results"></tbody>
 		  </table>		  
 		</div>
 		<div class="notification is-danger" style="display:none;">
 			  <button class="delete"></button>
 			  <span class="no-results"></span>
-			</div>
+		</div>
 		<!-- list item -->		
   </section>
   <nav class="navbar is-fixed-bottom" role="navigation" aria-label="main navigation">
@@ -62,8 +69,10 @@
   </nav>
   </body>
   <script>
-  $(document).ready(function(){
+  $('select').change(function(){
 		$('.loader-wrapper').addClass('is-active');
+		var pressMachine = $('select').find(":selected").val();
+		
 		$.ajax({
 		headers: {'Accept' : 'application/json'},
 		type: 'GET',
@@ -73,28 +82,37 @@
 		},
 		success: function (response, textStatus, request){
 		 $('.loader-wrapper').removeClass('is-active');
-			if(response.success){			
+		 
+			if(response.success && response.data.length > 0){			
 				var resultHtml = '';
+				var count = 0;
 					for(var i=0;i<response.data.length;i++){
-					var datetoRun = new Date(response.data[i].DateToRun)
-						resultHtml += '<tr class="is-size-7-mobile">'+
-											'<td>' + datetoRun.toLocaleDateString('en-US') + '</td>'+
-											'<td class="has-text-centered">' + response.data[i].EquipmentNo + '</td>'+
-											'<td class="has-text-centered">' + response.data[i].TicketNumber + '</td>'+
-											'<td>' + response.data[i].Customer + '</td>'+
-											'<td>' + response.data[i].JobName + '</td>'+
-											'<td class="has-text-centered">' + response.data[i].HoursToRun + '</td>'+
-											'<td>' + response.data[i].Notes + '</td>'+											
-										'</tr>';
-					
+						var datetoRun = new Date(response.data[i].DateToRun);
+							if(response.data[i].EquipmentNo == pressMachine){
+								resultHtml += '<tr class="is-size-7-mobile">'+
+												'<td class="has-text-centered"><span class="is-block">' + datetoRun.toLocaleDateString('en-US') + '</span>' + 
+													'<span class="is-block has-text-danger-dark has-text-weight-bold">' + response.data[i].HoursToRun + 'hrs</span>'+
+												'</td>'+											
+												'<td>'+
+													'<span class="is-block has-text-weight-bold">Ticket: ' + response.data[i].TicketNumber + '</span>'+
+													'<span class="is-block has-text-primary-dark is-uppercase has-text-weight-bold">' + response.data[i].Customer + '</span>'+
+													'<span class="is-block">'+ response.data[i].JobName + '</span>'+												
+												'</td>'+												
+												'<td>' + response.data[i].Notes + '</td>'+											
+											'</tr>';
+							count++;
+							}
 				
 					}	
 				
-					
-					$('.results').html(resultHtml);
-					$('.result-list').css('display','block');	
-					$('.notification').css('display','none');				
-				
+					if(count > 0){
+						$('.results').html(resultHtml);
+						$('.result-list').css('display','block');	
+						$('.notification').css('display','none');				
+					}else{
+						$('.no-results').text("Oppsss.., No data available.");					
+						$('.notification').css('display','block');
+					}					
 				}else{
 					$('.no-results').text("Oppsss.., No data available.");					
 					$('.notification').css('display','block');
