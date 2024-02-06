@@ -27,7 +27,7 @@
   </section>
   <section class="section pt-0">
 	<div class="container">
-		<form method="get" action="https://script.google.com/macros/s/AKfycbxmT7-9SveuiVmVwVy-7Mnnz6DiafNrn-KnX7ADCV47h07b-MV_LjRWMWL80GLy8bLd/exec">
+		<form>
 			<div class="field">
 			  <label class="label is-medium mb-0">TICKET:</label>
 			  <div class="control input-field">
@@ -38,25 +38,25 @@
 			<div class="field">
 			  <label class="label is-medium mb-0">NO. of BOX(ES):</label>
 			  <div class="control">
-				<input class="input is-medium" name="NoOfBox" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
+				<input class="input is-medium NoOfBox" name="NoOfBox" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
 			  </div>
 			</div>
 			<div class="field">
 			  <label class="label is-medium mb-0">NO. of PART BOX:</label>
 			  <div class="control">
-				<input class="input is-medium" name="NoOfPartBox" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
+				<input class="input is-medium NoOfPartBox" name="NoOfPartBox" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
 			  </div>
 			</div>
 			<div class="field">
 			  <label class="label is-medium mb-0">QUANTITY:</label>
 			  <div class="control">
-				<input class="input is-medium" name="Quantity" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
+				<input class="input is-medium quantity" name="Quantity" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
 			  </div>
 			</div>
 			<div class="field">
 			  <label class="label is-medium mb-0">BOX SIZE:</label>
 			  <div class="control">
-			  <input list="boxes" class="select-list" name="BoxSize" id="boxSize">
+			  <input list="boxes" class="select-list BoxSize" name="BoxSize" id="boxSize">
 				<datalist id="boxes">			  
 					<option value="8 ¼ x 4 3/8 x 10">
 					<option value="9 x 9 x 4 ½">
@@ -88,7 +88,7 @@
 			</div>
 			<input type="hidden" name="sheet" value="production_data"/>
 			<div class="field has-text-centered my-6">
-				<input type="submit" class="button is-success is-medium" value="SUBMIT">
+				<button class="button is-success is-medium submitEntry">SUBMIT</button>
 			</div>
 		</form>
 	</div>	
@@ -123,5 +123,42 @@ function gestureStart() {
     }
   }
 }
+
+	 $('.submitEntry').onclick(function(){
+		 var ticketnum = $('.isbn').val();
+		 var noOfBox = $('.NoOfBox').val();
+		 var noOfPartBox = $('.NoOfPartBox').val();
+		 var  qty = $('.quantity').val();
+		 var boxSize = $('.BoxSize').val();
+			var data = {
+				"Ticket":ticketnum,
+				"NoOfBox":noOfBox,
+				"NoOfPartBox":noOfPartBox,
+				"Quantity":qty,
+				"BoxSize":boxSize
+			};
+		 $.ajax({
+		headers: {'Accept' : 'application/json'},
+		type: 'GET',
+		url: "https://script.google.com/macros/s/AKfycbz_7PCkZQyupqnAf66Lr8wWbObjiEzu0xsvy76PEOakhstMHHLYwsFtulR_txRUDe22Xw/exec",		
+		data: data,
+		beforeSend: function(xhr){
+		xhr.withCredentials = true;
+		},
+		success: function (data, statusText, jqXHR){
+		//console.log(data);
+			if(statusText == 'success'){				
+				
+				alert('Production Entry is successfully submitted!');
+				$('form').reset();
+			}else{
+				alert('Ooppss.. Something went wrong. Please try again!');		
+			}
+		}
+		});
+	 });
+
+
+	 
 </script>
 </html>
