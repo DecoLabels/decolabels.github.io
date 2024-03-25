@@ -79,7 +79,8 @@
 		var count = 0;
 		inventory.filter(function( item ) {
 		if(dpn == ''){dpn = 'DPN';}
-			if((item.ProductNumber).indexOf(dpn.toString()) > -1){
+			//if((item.ProductNumber).indexOf(dpn.toString()) > -1){
+			if(item.ProductNumber == dpn){
 				resultHtml += '<tr class="is-size-7-mobile">'+
 									'<td>' + item.ProductNumber + '</td>'+
 									'<td>' + item.Description + '</td>'+
