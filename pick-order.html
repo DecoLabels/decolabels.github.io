@@ -86,6 +86,7 @@
 	  <div class="control">
 		<input class="input is-medium ordernumber" type="text" placeholder="">
 		<input class="input is-medium dpn" type="hidden">	
+		<input class="input is-medium tnumber" type="hidden">	
 		<input class="input is-medium releaseTicket" type="hidden">	
 	  </div>
 	</div>
@@ -214,7 +215,7 @@
 	function addToPick(tktnum, dpn, qty, rownum){
 	
 		//$('#showAvailableModal').css('display','none');
-		//$('#addItemModal .ordernumber').val(tktnum);
+		$('#addItemModal .tnumber').val(tktnum);
 		$('#addItemModal .ordernumber').focus();
 		$('#addItemModal .dpn').val(dpn);
 		$('#addItemModal .rownumber').val(rownum);
@@ -247,7 +248,12 @@
 			$('#addItemModal .ordernumber').val('').focus();
 		}else{
 			$('.ticket-label').text('TICKET:');
-			$('#addItemModal .ordernumber').val("");
+			var tn = $('#addItemModal .tnumber').val();
+			if(tn != "" || tn != 0){
+				$('#addItemModal .ordernumber').val(tktnum);
+			}else{
+				$('#addItemModal .ordernumber').val("");
+			}
 		}
 	
 	});
