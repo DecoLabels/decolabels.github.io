@@ -250,7 +250,7 @@
 			$('.ticket-label').text('TICKET:');
 			var tn = $('#addItemModal .tnumber').val();
 			//console.log(tn);
-			if(tn != "" || tn != 0){
+			if(tn != "" || tn > 0){
 				$('#addItemModal .ordernumber').val(tn);
 			}else{
 				$('#addItemModal .ordernumber').val("");
