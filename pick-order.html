@@ -241,7 +241,7 @@
 	
 	$('.ordernumber').on('change', function(){
 		var dpn = $('#addItemModal .dpn').val();
-		console.log(dpn);
+		//console.log(dpn);
 		var prodNumber = $('#addItemModal .ordernumber').val();
 		if(dpn != prodNumber){
 			alert("Opss... You picked the wrong item.");
@@ -249,8 +249,9 @@
 		}else{
 			$('.ticket-label').text('TICKET:');
 			var tn = $('#addItemModal .tnumber').val();
+			//console.log(tn);
 			if(tn != "" || tn != 0){
-				$('#addItemModal .ordernumber').val(tktnum);
+				$('#addItemModal .ordernumber').val(tn);
 			}else{
 				$('#addItemModal .ordernumber').val("");
 			}
