@@ -82,9 +82,9 @@
  <button class="modal-close is-large" aria-label="close" onclick="hideModal('#addItemModal')"></button>  
   <div class="modal-content">
 	<div class="field">
-	  <label class="label is-medium mb-0">TICKET:</label>
+	  <label class="label is-medium mb-0 ticket-label">PRODUCTNUMBER:</label>
 	  <div class="control">
-		<input class="input is-medium ordernumber" type="number" placeholder="">
+		<input class="input is-medium ordernumber" type="text" placeholder="">
 		<input class="input is-medium dpn" type="hidden">	
 		<input class="input is-medium releaseTicket" type="hidden">	
 	  </div>
@@ -137,12 +137,14 @@
 														'<div class="list-item-description">'+
 														'<span class="ordrqty">Order QTY: '+item.order_qty+ '</span>'+
 														'<span class="pqty px-2"></span>'+
+														'<span class="iqty px-2">Available: '+item.inStock+'</span>'+														
 														'</div>'+
 														
 													'</div>'+
 													'<div class="list-item-controls noprint">'+
 														'<div class="buttons is-right">'+
-															'<button class="button pick-item" onclick="showAvailableToPick(\''+item.product_number+'\',\'row-'+item.row+'\')">'+
+															//'<button class="button pick-item" onclick="showAvailableToPick(\''+item.product_number+'\',\'row-'+item.row+'\')">'+
+															'<button class="button pick-item" onclick="addToPick(\'\',\''  + item.product_number + '\',' + item.inStock + ',\''+item.row+'\')">'+
 																'<span class="icon is-small">'+
 																	'<i class="fas fa-edit has-text-weight-bold">+</i>'+
 																'</span>'+
@@ -201,7 +203,7 @@
 											'</div>' +
 										 '</div>';
 			
-			count++;
+				count++;
 			}
 		}); 
 		
@@ -211,8 +213,9 @@
 	
 	function addToPick(tktnum, dpn, qty, rownum){
 	
-		$('#showAvailableModal').css('display','none');
-		$('#addItemModal .ordernumber').val(tktnum);
+		//$('#showAvailableModal').css('display','none');
+		//$('#addItemModal .ordernumber').val(tktnum);
+		$('#addItemModal .ordernumber').focus();
 		$('#addItemModal .dpn').val(dpn);
 		$('#addItemModal .rownumber').val(rownum);
 		
@@ -220,7 +223,7 @@
 			
 			$('#addItemModal .picked_qty').val(qty);
 		}else{
-			$('#addItemModal .noOfBox').val(qty);
+			//$('#addItemModal .noOfBox').val(qty);
 		}
 		$('#addItemModal').css('display','block');
 		
@@ -235,7 +238,19 @@
 	}
 	
 	
+	$('.ordernumber').on('change', function(){
+		var dpn = $('#addItemModal .dpn').val();
+		console.log(dpn);
+		var prodNumber = $('#addItemModal .ordernumber').val();
+		if(dpn != prodNumber){
+			alert("Opss... You picked the wrong item.");
+			$('#addItemModal .ordernumber').val('').focus();
+		}else{
+			$('.ticket-label').text('TICKET:');
+			$('#addItemModal .ordernumber').val("");
+		}
 	
+	});
 	
 	
 	
@@ -315,7 +330,7 @@
 		
 	
 		
-		$('#addItemModal').css('display','none');
+		hideModal('#addItemModal');
 	}
 	
 	

@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function hideModal(ele){
 		$(ele).css('display','none');
+		if(ele == '#addItemModal'){
+			$('.ticket-label').text('PRODUCTNUMBER:');
+			$('#addItemModal .ordernumber').val("");
+		}
 	}
 
 var ordersToPick = [];
