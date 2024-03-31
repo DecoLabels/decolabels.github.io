@@ -44,8 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
 function hideModal(ele){
 		$(ele).css('display','none');
 		if(ele == '#addItemModal'){
-			$('.ticket-label').text('PRODUCTNUMBER:');
-			$('#addItemModal .ordernumber').val("");
+			//$('.ticket-label').text('PRODUCTNUMBER:');
+			$('#addItemModal input').val("");
+			$('#addItemModal .ordertopick').addClass('disabled');
 		}
 	}
 

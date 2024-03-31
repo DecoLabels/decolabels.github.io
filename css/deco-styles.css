@@ -37,7 +37,14 @@ select{
 .search-box{
 	width: 100%;
 }
-
+.input, .select select, .textarea {
+    
+    border-color: #2F4F4F !important;
+	
+}
+.input:active, .input:focus, .is-active.input, .is-active.textarea, .is-focused.input, .is-focused.textarea, .select select.is-active, .select select.is-focused, .select select:active, .select select:focus, .textarea:active, .textarea:focus {
+	box-shadow: 0 0 0 0.125em rgba(105,105,105,.35)!important;
+}
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -76,7 +83,10 @@ select{
   cursor: pointer;
 }
 
-
+.disabled{
+	pointer-events: none;
+    opacity: .5;
+}
 
 @media screen and (min-width: 960px){
 .navbar.is-fixed-bottom {

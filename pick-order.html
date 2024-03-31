@@ -33,7 +33,7 @@
 		<div class="searchbox pb-4">
 			<div class="field has-addons">
 			  <div class="control search-box">
-				<input id="barcode-scanner" class="input" type="number" placeholder="Release Ticket Number" inputmode="numeric" pattern="[0-9]*">
+				<input id="barcode-scanner" class="input" autofocus type="number" placeholder="Release Ticket Number" inputmode="numeric" pattern="[0-9]*">
 			  </div>
 			  
 			  <div class="control">
@@ -81,12 +81,16 @@
 <div class="modal-background" onclick="hideModal('#addItemModal')"></div>
  <button class="modal-close is-large" aria-label="close" onclick="hideModal('#addItemModal')"></button>  
   <div class="modal-content">
-	<div class="field">
-	  <label class="label is-medium mb-0 ticket-label">PRODUCTNUMBER:</label>
+	  <div class="field">
+		  <label class="label is-medium mb-0 ticket-label">PRODUCT NUMBER:</label>
+		  <input class="input is-medium prnumber" type="text" placeholder="Scan or enter product/DPN number" autofocus>
+	</div>
+  <div class="ordertopick disabled">
+	<div class="field">	 
 	  <div class="control">
+		<label class="label is-medium mb-0 ticket-label">TICKET #:</label>
 		<input class="input is-medium ordernumber" type="text" placeholder="">
 		<input class="input is-medium dpn" type="hidden">	
-		<input class="input is-medium tnumber" type="hidden">	
 		<input class="input is-medium releaseTicket" type="hidden">	
 	  </div>
 	</div>
@@ -112,6 +116,7 @@
 	<div class="field has-text-centered my-6">
 		<button class="button is-success is-medium add-item-button">ADD</button>
 	</div>
+  </div>
   </div>
 </div>
  <!-- The Modal --> 
@@ -145,7 +150,7 @@
 													'<div class="list-item-controls noprint">'+
 														'<div class="buttons is-right">'+
 															//'<button class="button pick-item" onclick="showAvailableToPick(\''+item.product_number+'\',\'row-'+item.row+'\')">'+
-															'<button class="button pick-item" onclick="addToPick(\'' + item.TicketNumber + '\',\''  + item.product_number + '\',' + item.inStock + ',\''+item.row+'\')">'+
+															'<button class="button pick-item" onclick="addToPick(\'\',\''  + item.product_number + '\',' + item.inStock + ',\''+item.row+'\')">'+
 																'<span class="icon is-small">'+
 																	'<i class="fas fa-edit has-text-weight-bold">+</i>'+
 																'</span>'+
@@ -215,13 +220,12 @@
 	function addToPick(tktnum, dpn, qty, rownum){
 	
 		//$('#showAvailableModal').css('display','none');
-		$('#addItemModal .tnumber').val(tktnum);
+		//$('#addItemModal .ordernumber').val(tktnum);
 		$('#addItemModal .ordernumber').focus();
 		$('#addItemModal .dpn').val(dpn);
 		$('#addItemModal .rownumber').val(rownum);
 		
-		if(dpn.indexOf('LOB') <= -1){
-			
+		if(dpn.indexOf('LOB') <= -1){			
 			$('#addItemModal .picked_qty').val(qty);
 		}else{
 			//$('#addItemModal .noOfBox').val(qty);
@@ -239,44 +243,44 @@
 	}
 	
 	
-	$('.ordernumber').on('change', function(){
+	$('.prnumber').on('change', function(){
 		var dpn = $('#addItemModal .dpn').val();
-		//console.log(dpn);
-		var prodNumber = $('#addItemModal .ordernumber').val();
-		if(dpn != prodNumber){
-			alert("Opss... You picked the wrong item.");
-			$('#addItemModal .ordernumber').val('').focus();
+		
+		var prodNumber = $('#addItemModal .prnumber').val();
+		//console.log(dpn.indexOf(prodNumber));
+		if(dpn == prodNumber || dpn.indexOf(prodNumber) > -1){
+			//$('.ticket-label').text('TICKET:');
+			//$('#addItemModal .prnumber').val("");
+			$('#addItemModal .ordertopick').removeClass('disabled');
 		}else{
-			$('.ticket-label').text('TICKET:');
-			var tn = $('#addItemModal .tnumber').val();
-			//console.log(tn);
-			if(tn != "" || tn > 0){
-				$('#addItemModal .ordernumber').val(tn);
-			}else{
-				$('#addItemModal .ordernumber').val("");
-			}
+			alert("Opss... You picked the wrong item.");
+			$('#addItemModal .prnumber').val('').focus();
+			
 		}
 	
 	});
 	
 	
 	
-	$('.add-item-button').click(function(){
-	var rown = $('#addItemModal .rownumber').val();
-	var ticketnumber = $('#addItemModal .ordernumber').val();
-	var pickedQty = $('#addItemModal .picked_qty').val();
-	var noOfBox = $('#addItemModal .noOfBox').val();
-	var noOfPartBox = $('#addItemModal .noOfPartBox').val();
-	var dpn = $('#addItemModal .dpn').val();
-	var oqty = $('.'+rown+' #'+dpn+' .ordrqty').text();
+	$('#addItemModal .add-item-button').click(function(){
+	
+	var rown = $('#addItemModal .ordertopick .rownumber').val();
+	var ticketnumber = $('#addItemModal .ordertopick .ordernumber').val();
+	var pickedQty = $('#addItemModal .ordertopick .picked_qty').val();
+	var noOfBox = $('#addItemModal .ordertopick .noOfBox').val();
+	var noOfPartBox = $('#addItemModal .ordertopick .noOfPartBox').val();
+	var dpn = $('#addItemModal .ordertopick .dpn').val();
+	var oqty = $('.row-'+rown+' #'+dpn+' .ordrqty').text();
 	var isOk = false;
+	
 	if(dpn.indexOf('LOB') <= -1){
+	//console.log('.order-list .'+rown+' #'+dpn+' .pqty');
 		if(checkQty(parseInt(oqty.replace('Order QTY: ','')),pickedQty)){
-			$('.'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+pickedQty);	
+			$('.order-list .row-'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+pickedQty);	
 				isOk = true;
 		}else{
 			if (confirm("Are you sure to ship over? Ordered quantity is "+parseInt(oqty.replace('Order QTY: ','')))) {
-			 $('.'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+pickedQty);	
+			 $('.row-'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+pickedQty);	
 			  isOk = true;
 			} 
 			
@@ -285,11 +289,11 @@
 	}else{
 	
 		if(checkQty(parseInt(oqty.replace('Order QTY: ','')),noOfBox)){
-			$('.'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+noOfBox);
+			$('.row-'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+noOfBox);
 			isOk = true;
 		}else{
 			if (confirm("Are you sure to ship over? Ordered quantity is "+parseInt(oqty.replace('Order QTY: ','')))) {
-			  $('.'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+noOfBox);	
+			  $('.row-'+rown+' #'+dpn+' .pqty').html('Quantity Picked: '+noOfBox);	
 			  isOk = true;
 			} 
 		}
