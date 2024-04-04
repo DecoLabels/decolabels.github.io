@@ -81,6 +81,7 @@
 		if(dpn == ''){dpn = 'DPN';}
 			//if((item.ProductNumber).indexOf(dpn.toString()) > -1){
 			var dp = item.ProductNumber;
+			console.log(dp.indexOf('DPN'));
 			if(dp == dpn){
 				resultHtml += '<tr class="is-size-7-mobile">'+
 									'<td>' + item.ProductNumber + '</td>'+
