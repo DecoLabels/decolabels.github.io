@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" type="image/jpg" href="./img/logo.ico"/>
-		<meta name='robots' content='noindex, nofollow'/>
-    <title>Inventory Management | Deco Labels</title>
+	<meta name='robots' content='noindex, nofollow'/>
+    <title>Inventory | Deco Labels</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 	<link rel="stylesheet" href="./css/deco-styles.css">
 	<script src="./js/jquery-3.6.0.min.js"></script>
@@ -80,7 +80,7 @@
 		inventory.filter(function( item ) {
 		if(dpn == ''){dpn = 'DPN';}
 			//if((item.ProductNumber).indexOf(dpn.toString()) > -1){
-			if(item.ProductNumber == dpn){
+			if(item.ProductNumber == dpn || (item.ProductNumber).indexOf(dpn.toString()) > -1){
 				resultHtml += '<tr class="is-size-7-mobile">'+
 									'<td>' + item.ProductNumber + '</td>'+
 									'<td>' + item.Description + '</td>'+
