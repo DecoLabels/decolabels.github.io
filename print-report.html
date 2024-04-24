@@ -19,28 +19,43 @@
   <section class="section">
     <div class="container">
       <div class="columns is-centered">
-		  		  <div class="column is-half p-0">
-			<a class="" href="./index.html">
-			  <img class="logo" src="./img/deco-logo.jpg" alt="Deco Labels"/>
-			</a>
-		  </div>
-		</div>		
+	<div class="column is-half p-0">
+		<a class="" href="./index.html">
+			<img class="logo" src="./img/deco-logo.jpg" alt="Deco Labels"/>
+		</a>
+	</div>
+	</div>		
     </div>
   </section>
    <section class="section py-0 px-3">
 		<div class="searchbox pb-4 noprint">
-			<div class="field has-addons">
-			  <div class="control search-box">
-				<input id="barcode-scanner" class="input" autofocus type="number" placeholder="Job Ticket / Release Ticket" inputmode="numeric" pattern="[0-9]*">
-			  </div>			  
-			  <div class="control">
-				<a class="button is-info search-ticket">Search</a>
+			<div class="category">
+				<select class="whatToPrint select is-medium is-fullwidth">
+					<option value="">Select what to print</option>
+					<option value="production-entry">Production Entry</option>
+					<option value="order-picked">Order Picked</option>
+					<option value="box-inventory">Box Inventory</option>
+				</select>
+			</div>
+
+		   <div class="field has-addons">
+			  <div class="control search-box order-picked is-fullwidth" style="display:none;">
+				<input id="barcode-scanner" class="input mt-5" autofocus type="number" placeholder="Release Ticket" inputmode="numeric" pattern="[0-9]*">
 			  </div>
-			</div>			
+			  <div class="control search-box production-entry" style="display:none;">
+				<input id="datePicker" class="input mt-5" autofocus type="number" placeholder="Enter Date: mmddyyyy" inputmode="numeric" pattern="[0-9]*">
+			  </div>
+			  <div class="control search-box box-inventory" style="display:none;">
+				<input id="datePickerr" class="input mt-5" autofocus type="number" placeholder="Enter Date: mmddyyyy" inputmode="numeric" pattern="[0-9]*">
+			  </div>			  
+			  <div class="control get-report" style="display:none;">
+				<a class="button is-info search-ticket mt-5">Get Report</a>
+			  </div>
+		   </div>			
 		</div>
 		<div class="loader-wrapper">
-            <div class="loader is-loading"></div>
-        </div>
+            	     <div class="loader is-loading"></div>
+        	</div>
 		<!-- list item -->
 		<div class="list-to-print">
 		<div class="">
@@ -62,56 +77,141 @@
   </nav>
   
   <script>
- 
+ $('.whatToPrint').change(function(){
+	var selected =  $('.whatToPrint').val();
+	$('.search-box').css('display','none');
+	$('.get-report').css('display','none');
+	$('.search-box.'+selected).css('display','block');
+	$('.get-report').css('display','block');
+
+ });
   $('.search-ticket').click(function(){
 		
-		var tkt = $('.search-box input').val();
-			if(tkt != ''){
-				var resultHtml = '';
-				$('.loader-wrapper').addClass('is-active');
+	var whatToPrint = $('.whatToPrint').val();
+	var whichTable = '';
+	
+	var resultHtml = '';
+	$('.loader-wrapper').addClass('is-active');
+						
+	//get data from google sheet
+	var itemstoprint = [];
+	whichTable = (whatToPrint == 'order-picked' && whatToPrint != '') ? 'order_picked' : (whatToPrint == 'production-entry'  && whatToPrint != '') ? 'prodn_entry' : 'Box_Inventory';
+	var message = (whatToPrint == 'order-picked' && whatToPrint != '') ? 'Please enter Release Ticket Number.' : 'Please enter the date you want to print the report.'
+	var resultCount = 0;
+	var filtered =[];
+	var datePrepared = '';
+	var htext = '';
+	var whatreport = $('.whatToPrint').val();	
+		
+	if(whatreport != ''){
+	
+	$.ajax({
+		headers: {'Accept' : 'application/json'},
+		type: 'GET',
+		url: "https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec?action=read&table=" + whichTable,
+		beforeSend: function(xhr){xhr.withCredentials = true;},
+		success: function (response, textStatus, request){
+				
+			if(response.success){
+				itemstoprint = response.data;	
+				itemstoprint.filter(function( item ) {
+
+				switch(whatToPrint) {
+  				case 'order-picked':
+					var tkt = $('.search-box.' + whatToPrint + ' input').val();
+    					if((item.ReleaseTicket) == tkt ){   								
+						resultHtml += '<div class="list-item row-'+item.row+'">'+
+							         '<div class="list-item-content" id="'+item.ProductNumber+'">'+
+							            '<div class="list-item-title"><b>'+item.ProductNumber+'</b> Ticket#: '+item.TicketNumber+'</div>'+
+								     '<div class="list-item-description">'+
+								        '<span class="ordrqty">Order QTY: '+item.OrderQty+ '</span>'+
+								        '<span class="pqty px-2">Picked QTY: '+item.PickedQty+'</span>'+
+								        '<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+														
+								     '</div>'+														
+								    '</div>'+													
+							       '</div>';
 								
-				//get data from google sheet
-		var itemstoprint = [];
-		var whichTable = 'order_picked';
-		var resultCount = 0;
-		var filtered =[];
-		var datePrepared = '';
-		var htext = '';
-		$.ajax({
-					headers: {'Accept' : 'application/json'},
-					type: 'GET',
-					url: "https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec?action=read&table=" + whichTable,
-					beforeSend: function(xhr){xhr.withCredentials = true;},
-					success: function (response, textStatus, request){
-					
-						if(response.success){
-							itemstoprint = response.data;	
-							itemstoprint.filter(function( item ) {
-								if((item.ReleaseTicket) == tkt ){
-									//filtered.push(item);
-									resultHtml += '<div class="list-item row-'+item.row+'">'+
-													'<div class="list-item-content" id="'+item.ProductNumber+'">'+
-														'<div class="list-item-title"><b>'+item.ProductNumber+'</b> Ticket#: '+item.TicketNumber+'</div>'+
-														'<div class="list-item-description">'+
-														'<span class="ordrqty">Order QTY: '+item.OrderQty+ '</span>'+
-														'<span class="pqty px-2">Picked QTY: '+item.PickedQty+'</span>'+
-														'<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+														
-														'</div>'+														
-													'</div>'+													
-												 '</div>';
-									datePrepared = item.Timestamp;
-									resultCount++;
-								}
-							});
-							var d= new Date(datePrepared); d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
-							htext = 'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
-							//$('.list-to-print h1').html(htext);
-							//$('#listtoprint').html(resultHtml);
-						}else{
-							//alert('No data available...');
-						}		
+						datePrepared = item.Timestamp;
+						resultCount++;
+					} 
+    					break;
+
+				case 'production-entry':
+					var tkt = $('.search-box.' + whatToPrint + ' input').val();
+					var d = '';
+					if(tkt.length > 7){
+						d = tkt.toString().substr(0,2) +"/"+tkt.toString().substr(2,2)+"/"+tkt.toString().substr(4,tkt.length);
+					}else{
+						d = tkt.toString().substr(0,1) +"/"+tkt.toString().substr(1,2)+"/"+tkt.toString().substr(3,tkt.length);					
 					}
-			});
+
+					var getD = new Date(item.Timestamp);
+
+    					if(getD.toLocaleDateString() == d ){   								
+						resultHtml += '<div class="list-item row-'+item.row+'">'+
+							         '<div class="list-item-content" id="'+item.Ticket+'">'+
+							            '<div class="list-item-title"><b>TICKET#: '+item.Ticket+'</b></div>'+
+								     '<div class="list-item-description">'+
+									'<span class="ordrqty">'+item.description+ '</span><br>'+
+								        '<span class="ordrqty">QTY: '+item.Quantity+ '</span>'+
+								        '<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+														
+								     '</div>'+														
+								    '</div>'+													
+							       '</div>';
+								
+						datePrepared = item.Timestamp;
+						resultCount++;
+					}
+    					break;
+
+				case 'box-inventory':
+					// code block
+    					break;
+
+  				default:
+    					return false;
+				}
+
+				}); //end filter
+
+			var d= new Date(datePrepared); d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+			htext = ''; //'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
+			
+			//$('.list-to-print h1').html(htext);
+			$('#listtoprint').html(resultHtml);
+		      
+                       }else{
+			   alert('No data available...');
+		       }		
+		} //success:
+	}); //ajax
+
+
+	setTimeout(function(){
+		$('.list-to-print h1').html(htext);
+		$('#listtoprint').html(resultHtml);
+		$('.loader-wrapper').removeClass('is-active');					
+		$('#listtoprint').css('display','block');
+		$('.print-button').css('display','block');
+		//$('.submit-release-order').css('display','block');
+	}, 5000);
+
+
+
+	}else{
+		
+		alert(message);
+			
+	}
+}); //end click
+		$('.print-button').click(function(){
+		
+			$('.list-to-print').print();
+			
+		});
+
+		/*
+
 			//console.log(resultCount);
 			//check results
 			if(resultCount == 0){
@@ -153,29 +253,15 @@
 				});
 			}
 			
-			setTimeout(function(){
-					$('.list-to-print h1').html(htext);
-							$('#listtoprint').html(resultHtml);
-					$('.loader-wrapper').removeClass('is-active');					
-					$('#listtoprint').css('display','block');
-					$('.print-button').css('display','block');
-					//$('.submit-release-order').css('display','block');
-				}, 5000);
+			*/
 			
 			
 				
-			}else{
-				alert("Please enter Release Ticket or Job Ticket Number.");
 			
-			}
 		
 		
-	});
-		$('.print-button').click(function(){
+	
 		
-			$('.list-to-print').print();
-			
-		});
   </script>
   </body>
 </html>
