@@ -73,7 +73,11 @@
 <div id="showAvailableModal" class="modal">
 <div class="modal-background" onclick="hideModal('#showAvailableModal')"></div>
  <button class="modal-close is-large" aria-label="close" onclick="hideModal('#showAvailableModal')"></button>  
-  <div class="modal-content"></div>
+  	<div class="modal-content">
+	<label for="scannedBC">Scan item:</label>
+		<input data-dpn="" id="scannedBC" name="scannedBC" class="input is-medium scannedBC" type="text" placeholder="" autofocus="">
+		<button class="button is-warning is-medium doneScanning">DONE</button>
+	</div>
 </div>
  <!-- The Modal -->
  
@@ -86,7 +90,7 @@
 		  <label class="label is-medium mb-0 ticket-label">PRODUCT NUMBER:</label>
 		  <input class="input is-medium prnumber" type="text" placeholder="Scan or enter product/DPN number" autofocus>
 	</div>
-  <div class="ordertopick disabled">
+  <div class="ordertopick">
 	<div class="field">	 
 	  <div class="control">
 		<label class="label is-medium mb-0 ticket-label">TICKET #:</label>
@@ -231,7 +235,11 @@
 		}else{
 			//$('#addItemModal .noOfBox').val(qty);
 		}
-		$('#addItemModal').css('display','block');
+		//$('#addItemModal').css('display','block');
+		//show scan mode.
+		$('#showAvailableModal input').attr('data-dpn', dpn);
+		$('#showAvailableModal').css('display','block');
+
 		
 	}
 	
@@ -244,7 +252,7 @@
 	}
 	
 	
-	$('.prnumber').on('change', function(){
+	/*$('.prnumber').on('change', function(){
 		var dpn = $('#addItemModal .dpn').val();
 		
 		var prodNumber = $('#addItemModal .prnumber').val();
@@ -260,7 +268,7 @@
 		}
 	
 	});
-	
+	*/
 	
 	
 	$('#addItemModal .add-item-button').click(function(){
@@ -347,6 +355,22 @@
 	
 	
 	 
+	});
+
+	$('.doneScanning').click(function(){
+
+		var scannedBarcodes = $('.scannedBC').val();
+
+		var dpn = $('.scannedBC').attr('data-dpn');
+		var qtyscanned = (scannedBarcodes.split(dpn)).length - 1;
+		$('#addItemModal .prnumber').val(dpn);
+		$('#addItemModal .noOfBox').val(qtyscanned);
+		//console.log(qtyscanned);
+		$('#addItemModal').css('display','block');
+		//$('#showAvailableModal input').attr('data-dpn', '');
+		hideModal('#showAvailableModal');
+		$('.scannedBC').val('');
+	
 	});
 	
 	$('.submit-release-order').click(function(){
