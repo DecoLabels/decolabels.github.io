@@ -175,10 +175,10 @@
 				}); //end filter
 
 			var d= new Date(datePrepared); d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
-			htext = ''; //'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
+			htext = 'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
 			
 			//$('.list-to-print h1').html(htext);
-			$('#listtoprint').html(resultHtml);
+			$('#listtoprint').html('<h1>'+htext+'</h1>' + resultHtml);
 		      
                        }else{
 			   alert('No data available...');
