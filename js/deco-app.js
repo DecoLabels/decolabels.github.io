@@ -46,7 +46,7 @@ function hideModal(ele){
 		if(ele == '#addItemModal'){
 			//$('.ticket-label').text('PRODUCTNUMBER:');
 			$('#addItemModal input').val("");
-			$('#addItemModal .ordertopick').addClass('disabled');
+			//$('#addItemModal .ordertopick').addClass('disabled');
 		}
 	}
 
