@@ -138,16 +138,16 @@
 
 				case 'production-entry':
 					var tkt = $('.search-box.' + whatToPrint + ' input').val();
-					var d = new Date(tkt);
-					/*if(tkt.length > 7){
-						d = tkt.toString().substr(0,2) +"/"+tkt.toString().substr(2,2)+"/"+tkt.toString().substr(4,tkt.length);
+					var d = '';
+					if(tkt.length > 7){
+						//d = tkt.toString().substr(0,2) +"/"+tkt.toString().substr(2,2)+"/"+tkt.toString().substr(4,tkt.length);
 					}else{
-						d = tkt.toString().substr(0,1) +"/"+tkt.toString().substr(1,2)+"/"+tkt.toString().substr(3,tkt.length);					
+						//d = tkt.toString().substr(0,1) +"/"+tkt.toString().substr(1,2)+"/"+tkt.toString().substr(3,tkt.length);					
 					}
-					*/
+					d = tkt.split('-')[1] + '/' + tkt.split('-')[2] + '/' + tkt.split('-')[0];
 					var getD = new Date(item.Timestamp);
 
-    					if(getD.toLocaleDateString() == d.toLocaleDateString() ){   								
+    					if(getD.toLocaleDateString() == d ){   								
 						resultHtml += '<div class="list-item row-'+item.row+'">'+
 							         '<div class="list-item-content" id="'+item.Ticket+'">'+
 							            '<div class="list-item-title"><b>TICKET#: '+item.Ticket+'</b></div>'+
