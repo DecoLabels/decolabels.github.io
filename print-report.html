@@ -43,10 +43,10 @@
 				<input id="barcode-scanner" class="input mt-5" autofocus type="number" placeholder="Release Ticket" inputmode="numeric" pattern="[0-9]*">
 			  </div>
 			  <div class="control search-box production-entry" style="display:none;">
-				<input id="datePicker" class="input mt-5" autofocus type="number" placeholder="Enter Date: mmddyyyy" inputmode="numeric" pattern="[0-9]*">
+				<input id="datePicker" class="input mt-5" autofocus type="date" placeholder="Enter Date">
 			  </div>
 			  <div class="control search-box box-inventory" style="display:none;">
-				<input id="datePickerr" class="input mt-5" autofocus type="number" placeholder="Enter Date: mmddyyyy" inputmode="numeric" pattern="[0-9]*">
+				<input id="datePickerr" class="input mt-5" autofocus type="date" placeholder="Enter Date">
 			  </div>			  
 			  <div class="control get-report" style="display:none;">
 				<a class="button is-info search-ticket mt-5">Get Report</a>
@@ -138,16 +138,16 @@
 
 				case 'production-entry':
 					var tkt = $('.search-box.' + whatToPrint + ' input').val();
-					var d = '';
-					if(tkt.length > 7){
+					var d = new Date(tkt);
+					/*if(tkt.length > 7){
 						d = tkt.toString().substr(0,2) +"/"+tkt.toString().substr(2,2)+"/"+tkt.toString().substr(4,tkt.length);
 					}else{
 						d = tkt.toString().substr(0,1) +"/"+tkt.toString().substr(1,2)+"/"+tkt.toString().substr(3,tkt.length);					
 					}
-
+					*/
 					var getD = new Date(item.Timestamp);
 
-    					if(getD.toLocaleDateString() == d ){   								
+    					if(getD.toLocaleDateString() == d.toLocaleDateString() ){   								
 						resultHtml += '<div class="list-item row-'+item.row+'">'+
 							         '<div class="list-item-content" id="'+item.Ticket+'">'+
 							            '<div class="list-item-title"><b>TICKET#: '+item.Ticket+'</b></div>'+
