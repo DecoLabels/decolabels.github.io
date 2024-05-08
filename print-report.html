@@ -141,13 +141,13 @@
 
 				case 'production-entry':
 					var tkt = $('.search-box.' + whatToPrint + ' input').val();
-					
+					var d = "";
 					if(tkt.length > 7){
 						//d = tkt.toString().substr(0,2) +"/"+tkt.toString().substr(2,2)+"/"+tkt.toString().substr(4,tkt.length);
 					}else{
 						//d = tkt.toString().substr(0,1) +"/"+tkt.toString().substr(1,2)+"/"+tkt.toString().substr(3,tkt.length);					
 					}
-					var d = tkt.split('-')[1] + '/' + tkt.split('-')[2] + '/' + tkt.split('-')[0];
+					d = tkt.split('-')[1] + '/' + tkt.split('-')[2] + '/' + tkt.split('-')[0];
 					var getD = new Date(item.Timestamp);
 					var options = {month: '2-digit',day:'2-digit',year:'numeric'};
     					if(getD.toLocaleDateString('en-US',options) == d ){   								
@@ -166,7 +166,7 @@
 						resultCount++;
 					}
 					
-			htext = 'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
+			htext = 'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+ tkt +'</span>';
 						$('#listtoprint').html('<h1>'+htext+'</h1>' + resultHtml);
 
     					break;
