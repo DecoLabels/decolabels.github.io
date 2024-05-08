@@ -122,7 +122,7 @@
     					if((item.ReleaseTicket) == tkt ){   								
 						resultHtml += '<div class="list-item row-'+item.row+'">'+
 							         '<div class="list-item-content" id="'+item.ProductNumber+'">'+
-							            '<div class="list-item-title"><b>'+item.ProductNumber+'</b> Ticket#: '+item.TicketNumber+'</div>'+
+							            '<div class="list-item-title"><b>Date: '+new Date(item.Timestamp).toLocaleDateString()+' '+item.ProductNumber+'</b> Ticket#: '+item.TicketNumber+'</div>'+
 								     '<div class="list-item-description">'+
 								        '<span class="ordrqty">Order QTY: '+item.OrderQty+ '</span>'+
 								        '<span class="pqty px-2">Picked QTY: '+item.PickedQty+'</span>'+
@@ -134,17 +134,20 @@
 						datePrepared = item.Timestamp;
 						resultCount++;
 					} 
+				var d = new Date(datePrepared); d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+			htext = 'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
+					$('#listtoprint').html('<h1>'+htext+'</h1>' + resultHtml);
     					break;
 
 				case 'production-entry':
 					var tkt = $('.search-box.' + whatToPrint + ' input').val();
-					var d = '';
+					
 					if(tkt.length > 7){
 						//d = tkt.toString().substr(0,2) +"/"+tkt.toString().substr(2,2)+"/"+tkt.toString().substr(4,tkt.length);
 					}else{
 						//d = tkt.toString().substr(0,1) +"/"+tkt.toString().substr(1,2)+"/"+tkt.toString().substr(3,tkt.length);					
 					}
-					d = tkt.split('-')[1] + '/' + tkt.split('-')[2] + '/' + tkt.split('-')[0];
+					var d = tkt.split('-')[1] + '/' + tkt.split('-')[2] + '/' + tkt.split('-')[0];
 					var getD = new Date(item.Timestamp);
 					var options = {month: '2-digit',day:'2-digit',year:'numeric'};
     					if(getD.toLocaleDateString('en-US',options) == d ){   								
@@ -159,9 +162,13 @@
 								    '</div>'+													
 							       '</div>';
 								
-						datePrepared = item.Timestamp;
+						//datePrepared = item.Timestamp;
 						resultCount++;
 					}
+					
+			htext = 'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
+						$('#listtoprint').html('<h1>'+htext+'</h1>' + resultHtml);
+
     					break;
 
 				case 'box-inventory':
@@ -174,11 +181,10 @@
 
 				}); //end filter
 
-			var d= new Date(datePrepared); d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
-			htext = 'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
+			
 			
 			//$('.list-to-print h1').html(htext);
-			$('#listtoprint').html('<h1>'+htext+'</h1>' + resultHtml);
+			
 		      
                        }else{
 			   alert('No data available...');

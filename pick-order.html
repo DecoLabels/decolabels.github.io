@@ -74,9 +74,9 @@
 <div class="modal-background" onclick="hideModal('#showAvailableModal')"></div>
  <button class="modal-close is-large" aria-label="close" onclick="hideModal('#showAvailableModal')"></button>  
   	<div class="modal-content">
-	<label for="scannedBC">Scan item:</label>
-		<input data-dpn="" id="scannedBC" name="scannedBC" class="input is-medium scannedBC" type="text" placeholder="" autofocus="">
-		<button class="button is-warning is-medium doneScanning">DONE</button>
+	<label for="scannedBC" class="has-text-weight-bold">Scan item:</label>
+		<input data-dpn="" id="scannedBC" name="scannedBC" class="input is-medium scannedBC" type="text" placeholder="" autofocus>
+		<button class="button is-warning mt-4 is-medium doneScanning">DONE</button>
 	</div>
 </div>
  <!-- The Modal -->
@@ -372,6 +372,23 @@
 		$('.scannedBC').val('');
 	
 	});
+
+	$('.scannedBC').on('input',function(){
+		var dpn = $(this).data('dpn');
+    var toMatch = $(this).val();
+    var data = toMatch.match(new RegExp(/.{1,15}/g));
+    if(data[data.length - 1] != dpn){
+    	//alert('This item' + data[data.length - 1] + ' is not ' + dpn);
+    	if (confirm('This item' + data[data.length - 1] + ' is not ' + dpn + '! Remove from the skid?')) {
+			  //txt = "You pressed OK!";
+				$(this).val(toMatch.replace(data[data.length - 1],""));
+			} else {
+			  //txt = "You pressed Cancel!";
+				$(this).val(toMatch);
+			}
+    }
+    $(this).setCursorToTextEnd();
+	});
 	
 	$('.submit-release-order').click(function(){
 		if (confirm('Do you want to print the pick order report?')) {
@@ -386,7 +403,12 @@
 	
 	});
 	
-	
+	(function($){
+    $.fn.setCursorToTextEnd = function() {
+        var $initialVal = this.val();
+        this.val($initialVal);
+    };
+})(jQuery);
 	
 </script>
   </body>
