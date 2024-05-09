@@ -96,11 +96,12 @@
 			if(response.success){			
 				var resultHtml = '';
 					for(var i=0;i<response.data.length;i++){
+						var isMinToOrder = (response.data[i].Available <= response.data[i].minToOrder) ? 'has-text-warning' : '';
 						resultHtml += '<tr class="is-size-7-mobile">'+
 											'<td><span class="is-vcentered">' + response.data[i].BoxSize + '</span></td>'+
 											//'<td>' + response.data[i].Quantity + '</td>'+
 											//'<td class="has-text-centered">' + response.data[i].Usage + '</td>'+
-											'<td class="has-text-centered"><span class="is-vcentred is-size-6">' + response.data[i].Available + '</span>'+ 
+											'<td class="has-text-centered"><span class="is-vcentred is-size-6 '+isMinToOrder+'">' + response.data[i].Available + '</span>'+ 
 											'<button class="button is-small is-pulled-right" onclick="updateBoxModal('+
 											  response.data[i].row + ',\'' + response.data[i].BoxSize + '\',' + response.data[i].Available + ')">UPDATE</button></td>'+											
 										'</tr>';
