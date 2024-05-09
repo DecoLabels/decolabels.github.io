@@ -132,7 +132,7 @@
         </div>
     </div> -->
 <script>
-
+var globalDPN = '';
 	$('.search-ticket').click(function(){
 	
 		var ticketnum = $('.search-box input').val();
@@ -237,7 +237,8 @@
 		}
 		//$('#addItemModal').css('display','block');
 		//show scan mode.
-		$('#showAvailableModal input').attr('data-dpn', dpn);
+		globalDPN = dpn;
+		//$('#showAvailableModal input').attr('data-dpn', dpn);
 		$('#showAvailableModal').css('display','block');
 
 		
@@ -367,20 +368,20 @@
 		$('#addItemModal .noOfBox').val(qtyscanned);
 		//console.log(qtyscanned);
 		$('#addItemModal').css('display','block');
-		$('#showAvailableModal input').attr('data-dpn', '');
+		//$('#showAvailableModal input').attr('data-dpn', '');
 		hideModal('#showAvailableModal');
 		$('.scannedBC').val('');
 	
 	});
 
-	$('#scannedBC').on('input, change',function(e){
+	$('.scannedBC').on('input, change',function(e){
 		e.preventDefault();
 		var dpn = $(this).data('dpn');
     		var toMatch = $(this).val();
     		var data = toMatch.match(new RegExp(/.{1,15}/g));
-    			if(data[data.length - 1] != dpn){
-    				//alert('This item' + data[data.length - 1] + ' is not ' + dpn);
-    				if (confirm('This item' + data[data.length - 1] + ' is not ' + dpn + '! Remove from the skid?')) {
+    			if(data[data.length - 1] != globalDPN){
+    				//alert('This item ' + data[data.length - 1] + ' is not ' + globalDPN);
+    				if (confirm('This item' + data[data.length - 1] + ' is not ' + globalDPN + '! Remove from the skid?')) {
 			  		//txt = "You pressed OK!";
 					$(this).val(toMatch.replace(data[data.length - 1],""));
 				} else {
