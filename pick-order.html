@@ -75,7 +75,7 @@
  <button class="modal-close is-large" aria-label="close" onclick="hideModal('#showAvailableModal')"></button>  
   	<div class="modal-content">
 	<label for="scannedBC" class="has-text-weight-bold">Scan item:</label>
-		<input type="number" data-dpn="" id="scannedBC" name="scannedBC" class="input is-medium scannedBC">
+		<input type="type" id="scannedBC" name="scannedBC" class="input is-medium scannedBC" data-dpn="">
 		<button class="button is-warning mt-4 is-medium doneScanning">DONE</button>
 	</div>
 </div>
@@ -388,7 +388,7 @@
 					$(this).val(toMatch);
 				}
    		 	}
-    $(this).setCursorToTextEnd();
+    //$(this).setCursorToTextEnd();
 	});
 	
 	$('.submit-release-order').click(function(){
