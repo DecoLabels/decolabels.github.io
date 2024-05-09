@@ -376,7 +376,7 @@ var globalQTY = 0;
 	});
 
 	$('.scannedBC').on('input, change',function(e){
-		e.preventDefault();
+		//e.preventDefault();
 		var dpn = $(this).data('dpn');
     		var toMatch = $(this).val();
     		var data = toMatch.match(new RegExp(/.{1,15}/g));
