@@ -372,7 +372,8 @@ var globalQTY = 0;
 		//$('#showAvailableModal input').attr('data-dpn', '');
 		hideModal('#showAvailableModal');
 		$('.scannedBC').val('');
-	
+		$('#addItemModal .noOfBox').val('');
+		$('#addItemModal .noOfBox').val(qtyscanned);
 	});
 
 	$('.scannedBC').on('input, change',function(e){
