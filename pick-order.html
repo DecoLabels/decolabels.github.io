@@ -373,20 +373,21 @@
 	
 	});
 
-	$('.scannedBC').on('input',function(){
+	$('#scannedBC').on('input, change',function(e){
+		e.preventDefault();
 		var dpn = $(this).data('dpn');
-    var toMatch = $(this).val();
-    var data = toMatch.match(new RegExp(/.{1,15}/g));
-    if(data[data.length - 1] != dpn){
-    	//alert('This item' + data[data.length - 1] + ' is not ' + dpn);
-    	if (confirm('This item' + data[data.length - 1] + ' is not ' + dpn + '! Remove from the skid?')) {
-			  //txt = "You pressed OK!";
-				$(this).val(toMatch.replace(data[data.length - 1],""));
-			} else {
-			  //txt = "You pressed Cancel!";
-				$(this).val(toMatch);
-			}
-    }
+    		var toMatch = $(this).val();
+    		var data = toMatch.match(new RegExp(/.{1,15}/g));
+    			if(data[data.length - 1] != dpn){
+    				//alert('This item' + data[data.length - 1] + ' is not ' + dpn);
+    				if (confirm('This item' + data[data.length - 1] + ' is not ' + dpn + '! Remove from the skid?')) {
+			  		//txt = "You pressed OK!";
+					$(this).val(toMatch.replace(data[data.length - 1],""));
+				} else {
+			 		 //txt = "You pressed Cancel!";
+					$(this).val(toMatch);
+				}
+   		 	}
     $(this).setCursorToTextEnd();
 	});
 	
