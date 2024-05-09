@@ -39,9 +39,6 @@
 			  
 			  <div class="control">
 				<a class="button is-info search-ticket">Search</a>
-
-				  <input type="text" pattern="([^\s][A-z0-9À-ž\s]+)">
-				  <input type="number">
 			  </div>
 			</div>
 			
@@ -78,7 +75,7 @@
  <button class="modal-close is-large" aria-label="close" onclick="hideModal('#showAvailableModal')"></button>  
   	<div class="modal-content">
 	<label for="scannedBC" class="has-text-weight-bold">Scan item:</label>
-		<input type="type" id="scannedBC" name="scannedBC" class="input is-medium scannedBC" data-dpn="">
+		<input type="text" pattern="([^\s][A-z0-9À-ž\s]+)" id="scannedBC" name="scannedBC" class="input is-medium scannedBC" data-dpn="">
 		<button class="button is-warning mt-4 is-medium doneScanning">DONE</button>
 	</div>
 </div>
