@@ -364,10 +364,9 @@ var globalQTY = 0;
 		var scannedBarcodes = $('.scannedBC').val();
 
 		var dpn = $('.scannedBC').attr('data-dpn');
-		var qtyscanned = globalQTY; 
-			//(scannedBarcodes.split(dpn)).length - 1;
+		var qtyscanned = (scannedBarcodes.split(dpn)).length - 1;
 		$('#addItemModal .prnumber').val(globalDPN);
-		$('#addItemModal .noOfBox').val(globalQTY);
+		//$('#addItemModal .noOfBox').val(globalQTY);
 		//console.log(qtyscanned);
 		$('#addItemModal').css('display','block');
 		//$('#showAvailableModal input').attr('data-dpn', '');
@@ -381,21 +380,21 @@ var globalQTY = 0;
 		var dpn = $(this).data('dpn');
     		var toMatch = $(this).val();
     		var data = toMatch.match(new RegExp(/.{1,15}/g));
-		var qty = 0;
+		//var qty = 0;
     			if(data[data.length - 1] != globalDPN){
     				//alert('This item ' + data[data.length - 1] + ' is not ' + globalDPN);
     				if (confirm('This item' + data[data.length - 1] + ' is not ' + globalDPN + '! Remove from the skid?')) {
 			  		//txt = "You pressed OK!";
 					$(this).val(toMatch.replace(data[data.length - 1],""));
-					qty = (toMatch.replace(data[data.length - 1],"")).match(new RegExp(/.{1,15}/g));
+					//qty = (toMatch.replace(data[data.length - 1],"")).match(new RegExp(/.{1,15}/g));
 				} else {
 			 		 //txt = "You pressed Cancel!";
 					$(this).val(toMatch);
-					qty = toMatch.match(new RegExp(/.{1,15}/g));
+					//qty = toMatch.match(new RegExp(/.{1,15}/g));
 				}
    		 	}
-		globalQTY = qty.length;
-		$('#addItemModal .noOfBox').val(globalQTY);
+		//globalQTY = qty.length;
+		//$('#addItemModal .noOfBox').val(globalQTY);
     $(this).setCursorToTextEnd();
 	});
 	
