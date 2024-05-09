@@ -364,7 +364,7 @@ var globalQTY = 0;
 		var scannedBarcodes = $('.scannedBC').val();
 
 		var dpn = $('.scannedBC').attr('data-dpn');
-		var qtyscanned = (scannedBarcodes.split(dpn)).length - 1;
+		var qtyscanned = (scannedBarcodes.split(globalDPN)).length - 1;
 		$('#addItemModal .prnumber').val(globalDPN);
 		//$('#addItemModal .noOfBox').val(globalQTY);
 		//console.log(qtyscanned);
