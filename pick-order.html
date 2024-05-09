@@ -367,7 +367,7 @@
 		$('#addItemModal .noOfBox').val(qtyscanned);
 		//console.log(qtyscanned);
 		$('#addItemModal').css('display','block');
-		//$('#showAvailableModal input').attr('data-dpn', '');
+		$('#showAvailableModal input').attr('data-dpn', '');
 		hideModal('#showAvailableModal');
 		$('.scannedBC').val('');
 	
@@ -405,11 +405,11 @@
 	});
 	
 	(function($){
-    $.fn.setCursorToTextEnd = function() {
-        var $initialVal = this.val();
-        this.val($initialVal);
-    };
-})(jQuery);
+    		$.fn.setCursorToTextEnd = function() {
+        		var $initialVal = this.val();
+        		this.val($initialVal);
+    		};
+	})(jQuery);
 	
 </script>
   </body>
