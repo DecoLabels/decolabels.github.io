@@ -196,7 +196,7 @@ var globalQTY = 0;
 				item.TicketNumber = ' ';
 			}
 				resultHtml += '<div class="list-item px-0">'+
-											'<div class="list-item-content" id="' + item.TicketNumber + '">' +
+											'<div class="list-item-content is-size-6" id="' + item.TicketNumber + '">' +
 												'<div class="list-item-title">' +
 													'<b>Ticket: ' + item.TicketNumber + '</b>' +
 													'<span class="px-2">DPN: ' + item.ProductNumber + '</span>' +													
@@ -238,10 +238,10 @@ var globalQTY = 0;
 		}
 		//$('#addItemModal').css('display','block');
 		//show scan mode.
-		globalDPN = dpn;
+		globalDPN = dpn.substr(0,15);
 		//$('#showAvailableModal input').attr('data-dpn', dpn);
 		$('#showAvailableModal').css('display','block');
-
+		$('.scannedBC').focus();
 		
 	}
 	
@@ -374,6 +374,10 @@ var globalQTY = 0;
 		$('.scannedBC').val('');
 		$('#addItemModal .noOfBox').val('');
 		$('#addItemModal .noOfBox').val(qtyscanned);
+		$('#'+globalDPN).addClass('has-background-success');
+		$('#'+globalDPN + ' .ordrqty').addClass('has-text-white');
+		$('#'+globalDPN + ' .pqty').addClass('has-text-white');
+		$('#'+globalDPN + ' .iqty').addClass('has-text-white');
 	});
 
 	$('.scannedBC').on('input, change',function(e){
@@ -396,7 +400,7 @@ var globalQTY = 0;
    		 	}
 		//globalQTY = qty.length;
 		//$('#addItemModal .noOfBox').val(globalQTY);
-    $(this).setCursorToTextEnd();
+    		$(this).setCursorToTextEnd();
 	});
 	
 	$('.submit-release-order').click(function(){
