@@ -96,7 +96,7 @@
 			if(response.success){			
 				var resultHtml = '';
 					for(var i=0;i<response.data.length;i++){
-						var isMinToOrder = (response.data[i].Available <= response.data[i].minToOrder) ? 'has-text-warning has-text-weight-bold' : '';
+						var isMinToOrder = (response.data[i].Available <= response.data[i].minToOrder) ? 'has-text-danger has-text-weight-bold' : '';
 						resultHtml += '<tr class="is-size-7-mobile">'+
 											'<td><span class="is-vcentered">' + response.data[i].BoxSize + '</span></td>'+
 											//'<td>' + response.data[i].Quantity + '</td>'+
