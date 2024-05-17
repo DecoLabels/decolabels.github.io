@@ -140,12 +140,25 @@ var globalQTY = 0;
 			if(ticketnum != ''){
 				var resultHtml = '';
 				$('.loader-wrapper').addClass('is-active');
+				var filteredOrders = [];
 				ordersToPick.filter(function( item ) {
 				
 					if(item.id == ticketnum){
-						resultHtml += '<div class="list-item row-'+item.row+'">'+
+						filteredOrders.push(item);
+					}
+				});
+				filteredOrders.sort(function(a, b){
+					//return a.product_number - b.product_number
+					return (b.product_number < a.product_number) ? 1 : -1;
+					});
+				
+					$.each(filteredOrders, function (i, item) {
+						
+						resultHtml += '<div class="list-item px-1 row-'+item.row+'">'+
 													'<div class="list-item-content is-size-6" id="'+item.product_number+'">'+
-														'<div class="list-item-title"><b>'+item.product_number+'</b> '+item.description+'</div>'+
+														'<div class="list-item-title"><b class="is-size-4">'+item.product_number+'</b> '+
+														'<span>' + item.description + '</span>' +
+														'</div>'+
 														'<div class="list-item-description">'+
 														'<span class="ordrqty">Order QTY: '+item.order_qty+ '</span>'+
 														'<span class="pqty px-2"></span>'+
@@ -165,10 +178,11 @@ var globalQTY = 0;
 														'</div>'+
 													'</div>'+
 												 '</div>';
+					});
+						
 					
-					
-					}
-				}); 
+			
+				
 				
 				setTimeout(function(){
 					$('.order-list h1').text("TICKET: "+ticketnum);
