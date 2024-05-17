@@ -227,7 +227,7 @@ var globalQTY = 0;
 	
 		//$('#showAvailableModal').css('display','none');
 		//$('#addItemModal .ordernumber').val(tktnum);
-		$('#addItemModal .ordernumber').focus();
+		//$('#addItemModal .ordernumber').focus();
 		$('#addItemModal .dpn').val(dpn);
 		$('#addItemModal .rownumber').val(rownum);
 		
@@ -240,8 +240,10 @@ var globalQTY = 0;
 		//show scan mode.
 		globalDPN = dpn.substr(0,15);
 		//$('#showAvailableModal input').attr('data-dpn', dpn);
+		$('.scannedBC').val('');
+		$('#addItemModal .noOfBox').val('');
 		$('#showAvailableModal').css('display','block');
-		$('.scannedBC').focus();
+		//$('.scannedBC').focus();
 		
 	}
 	
@@ -371,8 +373,8 @@ var globalQTY = 0;
 		$('#addItemModal').css('display','block');
 		//$('#showAvailableModal input').attr('data-dpn', '');
 		hideModal('#showAvailableModal');
-		$('.scannedBC').val('');
-		$('#addItemModal .noOfBox').val('');
+		//$('.scannedBC').val('');
+		//$('#addItemModal .noOfBox').val('');
 		$('#addItemModal .noOfBox').val(qtyscanned);
 		$('#'+globalDPN).addClass('has-background-success');
 		$('#'+globalDPN + ' .ordrqty').addClass('has-text-white');
