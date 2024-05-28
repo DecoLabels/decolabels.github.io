@@ -132,6 +132,7 @@ function gestureStart() {
 		 var  qty = $('.quantity').val();
 		 var boxSize = $('.BoxSize').val();
 			var data = {
+				"action":"insert",
 				"Ticket":ticketnum,
 				"NoOfBox":noOfBox,
 				"NoOfPartBox":noOfPartBox,
@@ -142,7 +143,7 @@ function gestureStart() {
 		 $.ajax({
 		headers: {'Accept' : 'application/json'},
 		type: 'GET',
-		url: "https://script.google.com/macros/s/AKfycbxeA_jmBy3xQ6jP_q6Zkax5JIEWh7ZTnCmM5k9k4RYcMCmyA3nPArk9Of4k-OSnEWct/exec",		
+		url: "https://script.google.com/macros/s/AKfycbx_zG7kzBmgZTnnlOgBvyw2cPB3zWpzmRnCkcw8_TyrL-Tusp4xNm2kg44dIteaeaRj/exec",		
 		data: data,
 		beforeSend: function(xhr){
 		xhr.withCredentials = true;

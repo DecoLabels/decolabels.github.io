@@ -181,6 +181,79 @@
 	</div>
   </nav>
   
+ <!-- modal -->
+<div id="updateBoxModal" class="modal">
+<div class="modal-background" onclick="hideModal('#updateBoxModal')"></div>
+ <button class="modal-close is-large" aria-label="close" onclick="hideModal('#updateBoxModal')"></button>  
+  <div class="modal-content">
+	<div class="formContainer">
+			<div class="field">
+			  <label class="label is-medium mb-0">TICKET:</label>
+			  <div class="control input-field">
+				<input id="isbn" class="input is-medium isbn" name="Ticket" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label is-medium mb-0">NO. of BOX(ES):</label>
+			  <div class="control">
+				<input class="input is-medium NoOfBox" name="NoOfBox" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label is-medium mb-0">NO. of PART BOX:</label>
+			  <div class="control">
+				<input class="input is-medium NoOfPartBox" name="NoOfPartBox" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label is-medium mb-0">QUANTITY:</label>
+			  <div class="control">
+				<input class="input is-medium quantity" name="Quantity" type="number" placeholder="" inputmode="numeric" pattern="[0-9]*">				
+			  </div>
+			</div>
+			<div class="field">
+			  <label class="label is-medium mb-0">BOX SIZE:</label>
+			  <div class="control">
+			  <input list="boxes" class="select-list BoxSize" name="BoxSize" id="boxSize">
+				<datalist id="boxes">			  
+					<option value="8 ¼ x 4 3/8 x 10">
+					</option><option value="9 x 9 x 4 ½">
+					</option><option value="10 ¾ x 10 ¾ x 10">
+					</option><option value="10 x 10 x 14">
+					</option><option value="11 x 11 x 12">
+					</option><option value="11 1/16 x 8 5/8 x 9 ½">
+					</option><option value="11 ½ x 11 ½ x 6">
+					</option><option value="FGF#1 11 3/8 x 11 3/8 x 3">
+					</option><option value="FGF#3 11 3/8 x 11 3/8 x 4 ¾">
+					</option><option value="FGF#2 12 x 12 x 3 ¾">
+					</option><option value="12 x 12 x 6">
+					</option><option value="12 x 9 x 9">
+					</option><option value="12 x 12 x 12">
+					</option><option value="12 ½ x 11 ¼  x 8 ½">
+					</option><option value="13 x 9 ½ x 5">
+					</option><option value="13 x 13 x 9">
+					</option><option value="15 x 10 x 8 ¼"> 
+					</option><option value="15 x 15 x 15">
+					</option><option value="16 x 8 x 13">
+					</option><option value="16 x 16 x 9">
+					</option><option value="16 x 16 x 10">
+					</option><option value="16 ¼  x 16 ¼  x 10 ½">
+					</option><option value="17 x 9 x 11">
+					</option><option value="18 x 9 x 10">
+					</option><option value="20 ¾ x 10 3/8 x 9">
+				</option></datalist>				
+			  </div>
+			</div>
+			<input type="hidden" name="sheet" value="production_data">
+			<div class="field has-text-centered my-6">
+				<button class="button is-success is-medium updateBoxButton">UPDATE</button>
+			</div>
+		</div>
+  </div>
+</div>
+  <!-- modal -->
+
+
   <script>
  $('.whatToPrint').change(function(){
  $('#listtoprint').html('');
@@ -276,11 +349,20 @@
 							if(getD.toLocaleDateString('en-US',options) == d  && item.customer == sortby){   								
 								resultHtml += '<div class="list-item row-'+item.row+'">'+
 											 '<div class="list-item-content" id="'+item.Ticket+'">'+
-												'<div class="list-item-title"><b>TICKET#: '+item.Ticket+'</b></div>'+
-											 '<div class="list-item-description">'+
-											'<span class="ordrqty">'+item.CustID+' '+item.description+ '</span><br>'+
-												'<span class="ordrqty">QTY: '+item.Quantity+ '</span>'+
-												'<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+														
+												'<div class="list-item-title" data-id="'+item.Ticket+'"><b>TICKET#: '+item.Ticket+'</b></div>'+
+											 '<div class="list-item-description columns">'+
+												 '<div class="column is-9">'+
+													'<span class="dpn">'+item.CustID+' '+item.description+ '</span><br>'+
+													'<span class="ordrqty" data-qty="'+item.Quantity+'">QTY: '+item.Quantity+ '</span>'+
+													'<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+	
+													'<span class="bxsize px-2">Box Size: '+item.BoxSize +'</span>'+	
+														'<input type="hidden" class="nb" name="nb" value="'+item.NoOfBox+'">'+
+														'<input type="hidden" class="pb" name="pb" value="'+item.NoOfPartBox+'">'+
+														'<input type="hidden" class="rn" name="rn" value="'+item.row+'">'+	
+												 '</div>'+
+												 '<div class="column is-3">'+
+													'<button class="button is-dark" onclick="updatePrdnEntry('+item.row+')">UPDATE</button>'+
+												 '</div>'+		
 											 '</div>'+														
 											'</div>'+													
 										   '</div>';
@@ -294,11 +376,19 @@
 							if(getD.toLocaleDateString('en-US',options) == d ){   								
 								resultHtml += '<div class="list-item row-'+item.row+'">'+
 											 '<div class="list-item-content" id="'+item.Ticket+'">'+
-												'<div class="list-item-title"><b>TICKET#: '+item.Ticket+'</b></div>'+
-											 '<div class="list-item-description">'+
-											'<span class="ordrqty">'+item.description+ '</span><br>'+
-												'<span class="ordrqty">QTY: '+item.Quantity+ '</span>'+
-												'<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+														
+												'<div class="list-item-title" data-id="'+item.Ticket+'"><b>TICKET#: '+item.Ticket+'</b></div>'+
+											 '<div class="list-item-description columns">'+
+												'<div class="column is-9">'+
+															'<span class="ordrqty" data-qty="'+item.Quantity+'">Order QTY: '+item.Quantity+ '</span>'+														
+															'<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+
+															'<span class="bxsize px-2">Box Size: '+item.BoxSize +'</span>'+	
+																'<input type="hidden" class="nb" name="nb" value="'+item.NoOfBox+'">'+
+																'<input type="hidden" class="pb" name="pb" value="'+item.NoOfPartBox+'">'+
+																'<input type="hidden" class="rn" name="rn" value="'+item.row+'">'+													
+												'</div>'+
+												'<div class="column is-3">'+
+													'<button class="button is-dark" onclick="updatePrdnEntry('+item.row+')">UPDATE</button>'+
+												'</div>'+												
 											 '</div>'+														
 											'</div>'+													
 										   '</div>';
@@ -371,57 +461,70 @@
 			
 		});
 
-		/*
-
-			//console.log(resultCount);
-			//check results
-			if(resultCount == 0){
-				whichTable = 'prodn_entry';				
-				resultHtml = '';
-				$.ajax({
-					headers: {'Accept' : 'application/json'},
-					type: 'GET',
-					url: "https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec?action=read&table=" + whichTable,
-					beforeSend: function(xhr){xhr.withCredentials = true;},
-					success: function (response, textStatus, request){
-					
-						if(response.success){
-							itemstoprint = response.data;	
-							itemstoprint.filter(function( item ) {
-								if((item.Ticket) == tkt ){
-									//filtered.push(item);
-									resultHtml += '<div class="list-item row-'+item.row+'">'+
-													'<div class="list-item-content" id="'+item.Ticket+'">'+
-														'<div class="list-item-title"><b>'+item.Description+'</b></div>'+
-														'<div class="list-item-description">'+
-														'<span class="ordrqty">Order QTY: '+item.Quantity+ '</span>'+														
-														'<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+														
-														'</div>'+														
-													'</div>'+													
-												 '</div>';
-									datePrepared = item.Timestamp;
-									resultCount++;
-								}
-							});
-							var d= new Date(datePrepared); d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
-							htext = 'Job Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
-							//$('.list-to-print h1').html(htext);
-							//$('#listtoprint').html(resultHtml);
-						}else{
-							//alert('No data available...');
-						}		
-					}
-				});
+		
+			
+			
+	function updatePrdnEntry(rowNumber){			
+		var ticketNumber = $('.list-item.row-'+rowNumber).find('.list-item-title').data('id');		
+		var orderQty = $('.list-item.row-'+rowNumber).find('.ordrqty').data('qty');	
+		var noOfBox = $('.list-item.row-'+rowNumber).find('.nb').val();
+		var boxSize = $('.list-item.row-'+rowNumber).find('.bxsize').text();
+		var partBox = $('.list-item.row-'+rowNumber).find('.pb').val();
+		
+//show modal
+		$('.isbn').val(ticketNumber);	
+		$('.NoOfBox').val(noOfBox);
+		$('.quantity').val(orderQty);
+		$('.BoxSize').val(boxSize.replace("Box Size: ",""));
+		$('.NoOfBox').val(noOfBox);
+		$('.NoOfPartBox').val(partBox);
+		$('.NoOfPartBox').val(partBox);
+		$('#updateBoxModal').css('display','block');
+		$('.updateBoxButton').data('rownum',rowNumber);
+	}
+	$('.updateBoxButton').click(function(){
+		var rownumber = $(this).data('rownum');
+		var tkt = $('.isbn').val();	
+		var nb = $('.NoOfBox').val();
+		var qty = $('.quantity').val();
+		var bsize = $('.BoxSize').val();
+		var pb = $('.NoOfPartBox').val();
+		var data = {
+				"action":"update",
+				"sheet":"producton_data",
+				"row":rownumber,
+				"Ticket":tkt,
+				"NoOfBox":nb,
+				"NoOfPartBox":pb,			
+				"Quantity":qty,
+				"BoxSize":bsize
+			};
+		$.ajax({
+		headers: {'Accept' : 'application/json'},
+		type: 'GET',
+		url: "https://script.google.com/macros/s/AKfycbx_zG7kzBmgZTnnlOgBvyw2cPB3zWpzmRnCkcw8_TyrL-Tusp4xNm2kg44dIteaeaRj/exec",		
+		data: data,
+		beforeSend: function(xhr){
+		xhr.withCredentials = true;
+		},
+		success: function (data, statusText, jqXHR){
+		//console.log(statusText);
+			if(statusText == 'success'){				
+				$('#updateBoxModal').css('display','none');
+				alert('Entry is successfully updated!');
+				//update report display
+				$('#'+tkt+' .ordrqty').text('Order QTY: '+qty);
+				$('#'+tkt+' .ordrqty').data('qty',qty);
+				$('#'+tkt+' .iqty').text('No. of Boxes: '+(nb + pb));
+				$('#'+tkt+' .bxsize').text('Box Size: '+bsize);
+				$('#'+tkt+' .nb').val(nb);
+				$('#'+tkt+' .pb').val(pb);
+			}else{
+				alert('Ooppss.. Something went wrong. Please try again!');		
 			}
-			
-			*/
-			
-			
-				
-			
-		
-		
-	
+		}
+		});	
+	});
 		
   </script>
   </body>
