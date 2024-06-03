@@ -513,9 +513,10 @@
 				$('#updateBoxModal').css('display','none');
 				alert('Entry is successfully updated!');
 				//update report display
+				var totalBox = (nb*1) + (pb*1);
 				$('#'+tkt+' .ordrqty').text('Order QTY: '+qty);
 				$('#'+tkt+' .ordrqty').data('qty',qty);
-				$('#'+tkt+' .iqty').text('No. of Boxes: '+(nb + pb));
+				$('#'+tkt+' .iqty').text('No. of Boxes: '+ totalBox);
 				$('#'+tkt+' .bxsize').text('Box Size: '+bsize);
 				$('#'+tkt+' .nb').val(nb);
 				$('#'+tkt+' .pb').val(pb);
