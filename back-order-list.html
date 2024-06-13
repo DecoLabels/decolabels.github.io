@@ -34,24 +34,24 @@
 				<input placeholder="Enter customer" id="sortby" name="sortbycustomer" list="sortbycustomer" class="select-list column">
 				<datalist id="sortbycustomer">					
 					<option value="SUMMER FRESH SALADS INC.">
-<option value="FGF BRANDS INC">
-<option value="CANADA BREAD COMPANY LIMITED">
-<option value="SOFINA FOODS INC (BRAMPTON)">
-<option value="CONCORD PREMIUM MEATS LTD">
-<option value="BUNZL CANADA INC BURLINGTON">
-<option value="SOFINA FOODS INC. (BRAMPTON)">
-<option value="2213256 ONTARIO LTD.">
-<option value="IMPERIAL DADE CANADA INC.">
-<option value="VIENNA MEAT - SOFINA FOODS INC.">
-<option value="COMMERCIAL BAKERIES CORPORATION">
-<option value="SANTE MANUFACTURING INC.">
-<option value="SHOPPERS DRUG MART">
-<option value="BIMBO BAKEHOUSE">
-<option value="BATTISTONI ITALIAN SPECIALTY MEATS">
-<option value="FROG BOX (2267605 ONTARIO INC.)">
-<option value="LOBLAW INC">
-<option value="SOFINA FOODS INC (MITCHELL)">
-<option value="TAYLOR FRESH FOODS">
+					<option value="FGF BRANDS INC">
+					<option value="CANADA BREAD COMPANY LIMITED">
+					<option value="SOFINA FOODS INC (BRAMPTON)">
+					<option value="CONCORD PREMIUM MEATS LTD">
+					<option value="BUNZL CANADA INC BURLINGTON">
+					<option value="SOFINA FOODS INC. (BRAMPTON)">
+					<option value="2213256 ONTARIO LTD.">
+					<option value="IMPERIAL DADE CANADA INC.">
+					<option value="VIENNA MEAT - SOFINA FOODS INC.">
+					<option value="COMMERCIAL BAKERIES CORPORATION">
+					<option value="SANTE MANUFACTURING INC.">
+					<option value="SHOPPERS DRUG MART">
+					<option value="BIMBO BAKEHOUSE">
+					<option value="BATTISTONI ITALIAN SPECIALTY MEATS">
+					<option value="FROG BOX (2267605 ONTARIO INC.)">
+					<option value="LOBLAW INC">
+					<option value="SOFINA FOODS INC (MITCHELL)">
+					<option value="TAYLOR FRESH FOODS">
 				</datalist>			  
 			  <div class="control get-bol">
 				<a class="button is-info search-ticket p-5">Get Back Oder List</a>
@@ -95,12 +95,12 @@ $('.search-ticket').click(function(){
 	var customerID = $('option[value="'+customerName+'"]').data('id');
 
 	var resultHtml = "";
-	//var customerName = "";
+	var count = 0;
 
 	if(customerName != '' || typeof(customerName) == undefined){
 		backOrderList.filter(function( item ) {
 			//if((item.product_number).substr(0,6) == customerID){
-			if(item.customer == customerName){
+			if(item.customer == customerName && item.BackOrder > 0){
 				resultHtml += '<div class="list-item row-'+item.row+'">'+
 				  		 '<div class="list-item-content" id="'+item.id+'">'+
 							'<div class="list-item-title" data-id="'+item.product_number+'"><b>'+item.product_number+'</b></div>'+
@@ -118,14 +118,16 @@ $('.search-ticket').click(function(){
 								'</div>'+														
 							'</div>'+													
 						'</div>';
-
+				count++;
 			}
 		});
-
+if(count > 0){
 	$('.back-order-list h1').text(customerName);
 	$('.back-order-list .list').html(resultHtml);
 	$('.back-order-list .list').css('display','block');
-
+}else{
+	$('.back-order-list h1').text("No Back Order Available.");
+}
 	}else{
 		alert("Please select customer.");	
 	}
