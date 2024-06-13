@@ -379,12 +379,13 @@
 												'<div class="list-item-title" data-id="'+item.Ticket+'"><b>TICKET#: '+item.Ticket+'</b></div>'+
 											 '<div class="list-item-description columns">'+
 												'<div class="column is-9">'+
-															'<span class="ordrqty" data-qty="'+item.Quantity+'">Order QTY: '+item.Quantity+ '</span>'+														
-															'<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+
-															'<span class="bxsize px-2">Box Size: '+item.BoxSize +'</span>'+	
-																'<input type="hidden" class="nb" name="nb" value="'+item.NoOfBox+'">'+
-																'<input type="hidden" class="pb" name="pb" value="'+item.NoOfPartBox+'">'+
-																'<input type="hidden" class="rn" name="rn" value="'+item.row+'">'+													
+															'<span class="dpn">'+item.CustID+' '+item.description+ '</span><br>'+
+													'<span class="ordrqty" data-qty="'+item.Quantity+'">QTY: '+item.Quantity+ '</span>'+
+													'<span class="iqty px-2">No. of Boxes: '+(item.NoOfBox + item.NoOfPartBox) +'</span>'+	
+													'<span class="bxsize px-2">Box Size: '+item.BoxSize +'</span>'+	
+														'<input type="hidden" class="nb" name="nb" value="'+item.NoOfBox+'">'+
+														'<input type="hidden" class="pb" name="pb" value="'+item.NoOfPartBox+'">'+
+														'<input type="hidden" class="rn" name="rn" value="'+item.row+'">'+													
 												'</div>'+
 												'<div class="column is-3 noprint">'+
 													'<button class="button is-dark" onclick="updatePrdnEntry('+item.row+')">UPDATE</button>'+
