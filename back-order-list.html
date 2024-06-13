@@ -107,10 +107,10 @@ $('.search-ticket').click(function(){
 								 '<div class="list-item-description columns">'+
 									 '<div class="column is-9">'+
 										'<span class="dpn">'+item.description+ '</span><br>'+
-										'<span class="ordrqty" data-qty="'+item.order_qty+'">QTY: '+item.order_qty+ '</span>'+
+										'<span class="ordrqty" data-qty="'+item.order_qty+'">Ordered QTY: '+item.order_qty+ '</span>'+
 										'<span class="bol px-2">Back Order: '+ item.BackOrder +'</span>'+	
 										'<span class="ticketnum px-2">Ticket Number: '+item.id +'</span>'+	
-										'<span class="ponum px-2">PO Number: '+item.shipped +'</span>'+
+										'<span class="ponum px-2">Shipped: '+item.shipped +'</span>'+
 									 '</div>'+
 									 '<div class="column is-3 noprint">'+
 										'<button class="button is-dark" onclick="pickProduct('+item.row+')">Pick Order</button>'+
@@ -145,7 +145,7 @@ function getBackOrderList(){
 		},
 		success: function (response, textStatus, request){
 				var filteredList = response.data;				
-				backOrderList = filteredList.sort(function(a, b){return (b.id < a.id) ? 1 : -1;}).sort(function(a, b){return (b.product_number < a.product_number) ? 1 : -1;});
+				backOrderList = filteredList.sort(function(a, b){return (b.product_number < a.product_number) ? 1 : -1;}).sort(function(a, b){return (b.id < a.id) ? 1 : -1;});
 			
 			}
 		});
