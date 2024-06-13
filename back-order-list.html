@@ -83,7 +83,17 @@
 	</div>
   </nav>
 
-
+ <!-- The Modal -->
+<div id="showAvailableModal" class="modal">
+<div class="modal-background" onclick="hideModal('#showAvailableModal')"></div>
+ <button class="modal-close is-large" aria-label="close" onclick="hideModal('#showAvailableModal')"></button>  
+  	<div class="modal-content">
+	<label for="scannedBC" class="has-text-weight-bold">Scan item:</label>
+		<input type="text" pattern="([^\s][A-z0-9À-ž\s]+)" id="scannedBC" name="scannedBC" class="input is-medium scannedBC" data-dpn="">
+		<button class="button is-warning mt-4 is-medium doneScanning">DONE</button>
+	</div>
+</div>
+ <!-- The Modal -->
 
 <script>
 var backOrderList=[];
@@ -113,7 +123,7 @@ $('.search-ticket').click(function(){
 										'<span class="ponum px-2">Shipped: '+item.shipped +'</span>'+
 									 '</div>'+
 									 '<div class="column is-3 noprint">'+
-										'<button class="button is-dark" onclick="pickProduct('+item.row+')">Pick Order</button>'+
+										'<button class="button is-dark" onclick="pickProduct(\'' + item.id + '\',\''  + item.product_number + '\',' + item.inStock + ',\''+item.row+'\')">Pick Order</button>'+
 									 '</div>'+		
 								'</div>'+														
 							'</div>'+													
@@ -153,7 +163,30 @@ function getBackOrderList(){
 			
 }
 
-
+function pickProduct(tktnum, dpn, qty, rownum){
+	
+		//$('#showAvailableModal').css('display','none');
+		//$('#addItemModal .ordernumber').val(tktnum);
+		//$('#addItemModal .ordernumber').focus();
+		$('#addItemModal .dpn').val(dpn);
+		$('#addItemModal .rownumber').val(rownum);
+		
+		if(dpn.indexOf('LOB') <= -1){			
+			$('#addItemModal .picked_qty').val(qty);
+		}else{
+			//$('#addItemModal .noOfBox').val(qty);
+		}
+		//$('#addItemModal').css('display','block');
+		//show scan mode.
+		globalDPN = dpn.substr(0,15);
+		//$('#showAvailableModal input').attr('data-dpn', dpn);
+		$('.scannedBC').val('');
+		$('#addItemModal .noOfBox').val('');
+		$('#showAvailableModal').css('display','block');
+		//$('.scannedBC').focus();
+		
+	}
+	
 
 
 </script>
