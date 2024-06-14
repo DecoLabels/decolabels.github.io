@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -90,12 +91,63 @@
   	<div class="modal-content">
 	<label for="scannedBC" class="has-text-weight-bold">Scan item:</label>
 		<input type="text" pattern="([^\s][A-z0-9À-ž\s]+)" id="scannedBC" name="scannedBC" class="input is-medium scannedBC" data-dpn="">
+		<input type="hidden" class="releaseTicket">
+		<input type="hidden" class="productNumber">
+		<input type="hidden" class="orderQty">
+		<input type="hidden" class="pickedQty">
+		<input type="hidden" class="noOfBox">
+		<input type="hidden" class="noOfPartBox">
 		<button class="button is-warning mt-4 is-medium doneScanning">DONE</button>
 	</div>
 </div>
  <!-- The Modal -->
-
+<!-- The Modal -->
+<div id="addItemModal" class="modal">
+<div class="modal-background" onclick="hideModal('#addItemModal')"></div>
+ <button class="modal-close is-large" aria-label="close" onclick="hideModal('#addItemModal')"></button>  
+  <div class="modal-content">
+	  <div class="field">
+		  <label class="label is-medium mb-0 ticket-label">PRODUCT NUMBER:</label>
+		  <input class="input is-medium prnumber" type="text" placeholder="Scan or enter product/DPN number" autofocus>
+	</div>
+  <div class="ordertopick">
+	<div class="field">	 
+	  <div class="control">
+		<label class="label is-medium mb-0 ticket-label">TICKET #:</label>
+		<input class="input is-medium ordernumber" type="text" placeholder="">
+		<input class="input is-medium dpn" type="hidden">	
+		<input class="input is-medium releaseTicket" type="hidden">	
+		<input class="input is-medium backOrderQty" type="hidden">	
+	  </div>
+	</div>
+	<div class="field">
+	  <label class="label is-medium mb-0">NO. of BOX(ES):</label>
+	  <div class="control">
+		<input class="input is-medium noOfBox" type="number" placeholder="" value="">				
+	  </div>
+	</div>
+	<div class="field">
+	  <label class="label is-medium mb-0">NO. of PART BOX:</label>
+	  <div class="control">
+		<input class="input is-medium noOfPartBox" type="number" placeholder="" value="0">				
+	  </div>
+	</div>
+	<div class="field">
+	  <label class="label is-medium mb-0">QUANTITY:</label>
+	  <div class="control">
+		<input class="input is-medium picked_qty" type="number" placeholder="">	
+		<input class="input is-medium rownumber" type="hidden">	
+	  </div>
+	</div>		
+	<div class="field has-text-centered my-6">
+		<button class="button is-success is-medium add-item-button">ADD</button>
+	</div>
+  </div>
+  </div>
+</div>
+ <!-- The Modal --> 
 <script>
+var globalDPN = '';
 var backOrderList=[];
 getBackOrderList();
 
@@ -121,9 +173,10 @@ $('.search-ticket').click(function(){
 										'<span class="bol px-2">Back Order: '+ item.BackOrder +'</span>'+	
 										'<span class="ticketnum px-2">Ticket Number: '+item.id +'</span>'+	
 										'<span class="ponum px-2">Shipped: '+item.shipped +'</span>'+
+										'<span class="pqty px-2"></span>'+
 									 '</div>'+
 									 '<div class="column is-3 noprint">'+
-										'<button class="button is-dark" onclick="pickProduct(\'' + item.id + '\',\''  + item.product_number + '\',' + item.inStock + ',\''+item.row+'\')">Pick Order</button>'+
+										'<button class="button is-dark" onclick="pickProduct(\'' + item.id + '\',\''  + item.product_number + '\',' + item.BackOrder + ',\''+item.row+'\')">Pick Order</button>'+
 									 '</div>'+		
 								'</div>'+														
 							'</div>'+													
@@ -146,48 +199,152 @@ if(count > 0){
 
 });
 
-function getBackOrderList(){
-	$.ajax({
+$('.doneScanning').click(function(){
+	var releaseTicket = $('#addItemModal .releaseTicket').val();
+	var productNumber = $('#addItemModal .productNumber').val();
+	var orderQty = $('#addItemModal .orderQty').val();
+	var rownumber = $('#addItemModal .rownumber').val();		
+	
+	var scannedBarcodes = $('.scannedBC').val();
+	var qtyscanned = (scannedBarcodes.split(globalDPN)).length - 1;
+	$('#addItemModal .prnumber').val(globalDPN);
+	$('#addItemModal').css('display','block');
+	hideModal('#showAvailableModal');
+	$('#addItemModal .noOfBox').val(qtyscanned);
+	$('.row'+rownumber).addClass('has-background-success');
+	$('.row'+rownumber + ' .ordrqty').addClass('has-text-white');
+	$('.row'+rownumber + ' .pqty').addClass('has-text-white');
+	$('.row'+rownumber + ' .iqty').addClass('has-text-white');
+
+});
+
+$('#addItemModal .add-item-button').click(function(){
+	
+	var rown = $('#addItemModal .ordertopick .rownumber').val();
+	var ticketnumber = $('#addItemModal .ordertopick .releaseTicket').val();
+	var pickedQty = $('#addItemModal .ordertopick .picked_qty').val();
+	var noOfBox = $('#addItemModal .ordertopick .noOfBox').val();
+	var noOfPartBox = $('#addItemModal .ordertopick .noOfPartBox').val();
+	var dpn = $('#addItemModal .prnumber').val();
+	var oqty = $('#addItemModal .ordertopick .backOrderQty').val();
+	var isOk = false;
+	
+	if(dpn.indexOf('LOB') <= -1){
+	//console.log('.order-list .'+rown+' #'+dpn+' .pqty');
+		if(checkQty(parseInt(oqty.replace('Back Order: ','')),pickedQty)){
+			$('.back-order-list .row-'+rown+' .pqty').html('Quantity Picked: '+pickedQty);	
+			isOk = true;
+		}else{
+			if (confirm("Are you sure to ship over? Ordered quantity is "+parseInt(oqty.replace('Back Order: ','')))) {
+			 $('.row-'+rown+' .pqty').html('Quantity Picked: '+pickedQty);	
+			  isOk = true;
+			} 
+			
+		}
+		
+	}else{
+	
+		if(checkQty(parseInt(oqty.replace('Order QTY: ','')),noOfBox)){
+			$('.row-'+rown+' .pqty').html('Quantity Picked: '+noOfBox);
+			isOk = true;
+		}else{
+			if (confirm("Are you sure to ship over? Ordered quantity is "+parseInt(oqty.replace('Back Order: ','')))) {
+			  $('.row-'+rown+' .pqty').html('Quantity Picked: '+noOfBox);	
+			  isOk = true;
+			} 
+		}
+		
+				
+		
+	}
+		
+	
+	if(isOk){
+		$('.row-'+rown).addClass('has-background-success');
+		var releaseTicket = $('.order-list h1').text();
+		var datePicked = new Date();
+		var data = {
+				"Timestamp":datePicked.toLocaleString(),
+				"ReleaseTicket":ticketnumber,				
+				"ProductNumber":dpn,
+				"BackOrder":parseInt(oqty.replace('Back Order: ','')),
+				"PickedQty":pickedQty,
+				"NoOfBox":noOfBox,
+				"NoOfPartBox":noOfPartBox,
+				"sheet":"picked_BackOrder"
+			};
+					
+		$.ajax({
 		headers: {'Accept' : 'application/json'},
 		type: 'GET',
-		url: "https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec?action=read&table=order_to_pick",
+		url: 'https://script.google.com/macros/s/AKfycbyLXRqGjBgdGr-XRoWsxYc8-IKyLl7wcaSmMnC5q32HtE8mzxfZ9nnRjYZx-wbRQ5pK/exec',
+		data: data,
 		beforeSend: function(xhr){
 		xhr.withCredentials = true;
 		},
-		success: function (response, textStatus, request){
+		success: function (response){
+		
+			if(response.success){
+				//console.log(response);
+				$('.row-'+rown).addClass('has-background-success');
+				
+			}else{
+			    alert('Something went wrong... Please add item again.');
+			}		
+		}
+		});
+		
+	
+		
+		hideModal('#addItemModal');
+	}
+	
+	
+	 
+	});
+
+	function checkQty(ordered, picked){
+		if(picked > ordered){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	function getBackOrderList(){
+		$.ajax({
+			headers: {'Accept' : 'application/json'},
+			type: 'GET',
+			url: "https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec?action=read&table=order_to_pick",
+			beforeSend: function(xhr){
+			xhr.withCredentials = true;
+			},
+			success: function (response, textStatus, request){
 				var filteredList = response.data;				
 				backOrderList = filteredList.sort(function(a, b){return (b.product_number < a.product_number) ? 1 : -1;}).sort(function(a, b){return (b.id < a.id) ? 1 : -1;});
 			
 			}
 		});
 			
-}
+	}
 
-function pickProduct(tktnum, dpn, qty, rownum){
-	
-		//$('#showAvailableModal').css('display','none');
-		//$('#addItemModal .ordernumber').val(tktnum);
-		//$('#addItemModal .ordernumber').focus();
-		$('#addItemModal .dpn').val(dpn);
-		$('#addItemModal .rownumber').val(rownum);
+	function pickProduct(tktnum, dpn, qty, rownum){	
+		$('#addItemModal .releaseTicket').val(tktnum);
+		$('#addItemModal .productNumber').val(dpn);
+		$('#addItemModal .backOrderQty').val(qty);
+		$('#addItemModal .rownumber').val(rownum);		
 		
-		if(dpn.indexOf('LOB') <= -1){			
-			$('#addItemModal .picked_qty').val(qty);
-		}else{
-			//$('#addItemModal .noOfBox').val(qty);
-		}
-		//$('#addItemModal').css('display','block');
-		//show scan mode.
 		globalDPN = dpn.substr(0,15);
-		//$('#showAvailableModal input').attr('data-dpn', dpn);
+		
 		$('.scannedBC').val('');
-		$('#addItemModal .noOfBox').val('');
+		
 		$('#showAvailableModal').css('display','block');
-		//$('.scannedBC').focus();
+		
 		
 	}
-	
 
+
+	
 
 </script>
   </body>
