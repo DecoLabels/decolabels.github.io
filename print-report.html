@@ -40,6 +40,7 @@
 					<option value="production-entry">Production Entry</option>
 					<option value="order-picked">Order Picked</option>
 					<option value="box-inventory">Box Inventory</option>
+					<option value="back-order">Back Order</option>
 				</select>
 			</div>
 
@@ -150,9 +151,39 @@
 					<option value="WOLF STEEL LTD" data-id="WOL002">
 				</datalist>
 			  </div>
-			  <div class="control search-box box-inventory" style="display:none;">
-				
-			  </div>			  
+			  <div class="control search-box box-inventory" style="display:none;">				
+			  </div>
+			  <div class="control columns search-box back-order mx-0" style="display:none;">
+				<input id="datePicker" class="input column mt-5" autofocus="autofocus" type="date" placeholder="Enter Date">
+				<label for="sortbycustomer" class="mt-5">
+				Sort by Customer:
+				</label>
+				<input id="sortby" name="sortbycustomer" list="sortbycustomer" class="select-list column">
+				  <datalist id="sortbycustomer">					
+					<option value="SUMMER FRESH SALADS INC.">
+					<option value="FGF BRANDS INC">
+					<option value="CANADA BREAD COMPANY LIMITED">
+					<option value="SOFINA FOODS INC (BRAMPTON)">
+					<option value="CONCORD PREMIUM MEATS LTD">
+					<option value="BUNZL CANADA INC BURLINGTON">
+					<option value="SOFINA FOODS INC. (BRAMPTON)">
+					<option value="2213256 ONTARIO LTD.">
+					<option value="IMPERIAL DADE CANADA INC.">
+					<option value="VIENNA MEAT - SOFINA FOODS INC.">
+					<option value="COMMERCIAL BAKERIES CORPORATION">
+					<option value="SANTE MANUFACTURING INC.">
+					<option value="SHOPPERS DRUG MART">
+					<option value="BIMBO BAKEHOUSE">
+					<option value="BATTISTONI ITALIAN SPECIALTY MEATS">
+					<option value="FROG BOX (2267605 ONTARIO INC.)">
+					<option value="LOBLAW INC">
+					<option value="SOFINA FOODS INC (MITCHELL)">
+					<option value="TAYLOR FRESH FOODS">
+				</datalist>	
+			  </div>
+
+
+			   
 			  <div class="control get-report" style="display:none;">
 				<a class="button is-info search-ticket mt-5">Get Report</a>
 			  </div>
