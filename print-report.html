@@ -314,8 +314,8 @@
 	$('.loader-wrapper').addClass('is-active');
 						
 	//get data from google sheet
-	var itemstoprint = [];
-	whichTable = (whatToPrint == 'order-picked' && whatToPrint != '') ? 'order_picked' : (whatToPrint == 'production-entry'  && whatToPrint != '') ? 'prodn_entry' : 'Box_Inventory';
+	var itemstoprint = [];  
+	whichTable = (whatToPrint == 'order-picked' && whatToPrint != '') ? 'order_picked' : (whatToPrint == 'production-entry'  && whatToPrint != '') ? 'prodn_entry' : (whatToPrint == 'back-order'  && whatToPrint != '') ? 'PickedBackOrder' : 'Box_Inventory';
 	var message = (whatToPrint == 'order-picked' && whatToPrint != '') ? 'Please enter Release Ticket Number.' : 'Please enter the date you want to print the report.'
 	var resultCount = 0;
 	var filtered =[];
@@ -355,7 +355,7 @@
 						resultCount++;
 					} 
 				var d = new Date(datePrepared); d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
-			htext = 'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
+					htext = 'Release Ticket#: '+tkt+ '<span class="is-pulled-right">Date: '+d.toLocaleDateString()+'</span>';
 					$('#listtoprint').html('<h1>'+htext+'</h1>' + resultHtml);
     					break;
 
@@ -436,15 +436,17 @@
 						$('#listtoprint').html('<h2>'+htext+'</h2>' + resultHtml);
 
     					break;
-
+				case 'back-order':
+					alert("under construction.... come back later");
+					break;
 				case 'box-inventory':
 					// code block
-								resultHtml += '<tr>'+
-												'<td>'+item.BoxSize+'</td>'+
-												'<td>'+item.Available+'</td>'+
-											  '</tr>';
+					resultHtml += '<tr>'+
+							'<td>'+item.BoxSize+'</td>'+
+							'<td>'+item.Available+'</td>'+
+						  '</tr>';
 						
-						$('#listtoprint').html('<table class="table is-bordered is-striped is-fullwidth"><thead><tr><th>BOX SIZE</th><th>AVAILABLE</th></tr></thead><tbody>'+resultHtml+'</tbody></table>');
+					$('#listtoprint').html('<table class="table is-bordered is-striped is-fullwidth"><thead><tr><th>BOX SIZE</th><th>AVAILABLE</th></tr></thead><tbody>'+resultHtml+'</tbody></table>');
     					$('#listtoprint').removeClass('list');
 						break;
 
