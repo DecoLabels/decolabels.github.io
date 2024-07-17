@@ -46,7 +46,27 @@ svg{width:100%;}
 			</div>
 		</div>			  
 	</div>	
-	<div class="corelabel columns">	</div>	
+	<div class="corelabel columns">	
+	<div class="column" style="display:none;">
+			<div class="">LOT#: <p class="lotnumber"></p></div>
+			<div class="">PO#: <p class="ponumber"></p></div>
+			<div class="">CUST#: <p class="custnumber"></p></div>
+			<div class=""><p class="productdescription"></p></div>
+			<div class="">QTY: <p class="quantity"></p></div>
+		</div>
+		<div class="column" style="display:none;">
+			<div class="">
+				<p class="columns">
+						<span class="column">OPER:</span>
+						<span class="operator column"></span>
+						<span class="proddate column has-text-right"></span>
+					
+				</p>
+			</div>
+			<div class=""><svg id="barcode"></svg></div>
+			<div class=""><p class="barcode-text"></p></div>
+		</div>
+</div>	
 <div class="printarea" style="display:none;">
 <button class="button is-large is-info printlabel">PRINT</button>
 </div>	
@@ -104,25 +124,7 @@ if(openorders[i].id == ticketnumber){
 				$('.proddate').text(yr.toString().substr(-2) +"-"+(month < 10 ? '0' + month : '' + month)+"-"+(day < 10 ? '0' + day : '' + day));
 				JsBarcode("#barcode", barcodetext );
 
-		html = '<div class="column" style="display:none;">'+
-			'<div class="">LOT#: <p class="lotnumber"></p></div>'+
-			'<div class="">PO#: <p class="ponumber"></p></div>'+
-			'<div class="">CUST#: <p class="custnumber"></p></div>'+
-			'<div class=""><p class="productdescription"></p></div>'+
-			'<div class="">QTY: <p class="quantity"></p></div>'+
-		'</div>'+
-		'<div class="column" style="display:none;">'+
-			'<div class="">'+
-				'<p class="columns">'+
-						'<span class="column">OPER:</span>'+
-						'<span class="operator column"></span>'+
-						'<span class="proddate column has-text-right"></span>'+
-					
-				'</p>'+
-			'</div>'+
-			'<div class=""><svg id="barcode"></svg></div>'+
-			'<div class=""><p class="barcode-text"></p></div>'+
-		'</div>';
+	
 			
 
 }
@@ -133,7 +135,7 @@ if(openorders[i].id == ticketnumber){
 		});
 
 
-$('.corelabel').html(html);
+$('.corelabel .column').css('display','block');
 $('.printarea').css('display','block');
 
 
