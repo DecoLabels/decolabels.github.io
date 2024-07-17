@@ -1,0 +1,162 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/jpg" href="./img/logo.ico"/>
+		<meta name='robots' content='noindex, nofollow'/>
+    <title>Inventory Management | Deco Labels</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+	<link rel="stylesheet" href="./css/deco-styles.css">
+	<script src="./js/jquery-3.6.0.min.js"></script>
+	<script src="./js/deco-app.js"></script>
+	<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.3/JsBarcode.all.min.js"></script>
+<style>
+p{display:inline-block;}
+svg{width:100%;}
+</style>
+  </head>
+  <body>
+  <section class="section">
+    <div class="container">
+      <div class="columns is-centered">
+	<div class="column is-half p-0">
+		<a class="" href="./index.html">
+			<img class="logo" src="./img/deco-logo.jpg" alt="Deco Labels"/>
+		</a>
+	</div>
+	</div>		
+    </div>
+  </section>
+   <section class="section py-0 px-3">
+	<div class="searchbox pb-4 noprint">
+			
+		<div class="field has-addons">
+			  
+			  <div class="control columns search-box production-entry mx-0">				
+				<input id="ticketnumber" class="input is-medium" autofocus="" type="number" placeholder="Ticket Number" inputmode="numeric" pattern="[0-9]*">
+				<input id="qty" class="input is-medium" autofocus="" type="text" placeholder="Quantity per roll/box">
+				<input id="operator" class="input is-medium" autofocus="" type="text" placeholder="Operator">
+				<!--<input id="numberOfLabels" class="input is-medium" autofocus="" type="number" placeholder="Number of Prints" inputmode="numeric" pattern="[0-9]*">-->
+				<div class="field has-text-centered print-button" style="margin-bottom:8rem;">
+				<button class="button createlabel is-primary is-medium">Create Label</button>
+			</div>
+		</div>			  
+	</div>	
+	<div class="corelabel columns">	</div>	
+<div class="printarea" style="display:none;">
+<button class="button is-large is-info printlabel">PRINT</button>
+</div>	
+</div>
+		<div class="loader-wrapper">
+            	     <div class="loader is-loading"></div>
+        	</div>		
+		 
+  </section>
+  <nav class="navbar is-fixed-bottom" role="navigation" aria-label="main navigation">
+	<div class="navbar-item">    
+		<a class="" href="./index.html"><img class="home-icon image is-48x48" src="./img/home-icon.png" alt="HOME"/></a>
+	</div>
+  </nav>
+
+ 
+
+<script>
+
+$('.createlabel').click(function(){
+
+var ticketnumber = $('#ticketnumber').val();
+var qty = $('#qty').val();
+var operator = $('#operator').val();
+var noOfPrints = $('#numberOfLabels').val();
+var ticketnumber = $('#ticketnumber').val();
+var html = '';
+
+	
+	$.ajax({
+			headers: {'Accept' : 'application/json'},
+			type: 'GET',
+			url: "https://script.google.com/macros/s/AKfycbyz41PpsyM77NkNhqf6dsah3W5ApSPGIapH-Nrd1EqFNkS4rYYQ98dEwr5WI8Q65vjcGA/exec?action=read&table=open_orders",
+			beforeSend: function(xhr){
+			xhr.withCredentials = true;
+			},
+			success: function (response, textStatus, request){
+				var openorders = response.data;				
+				//openorders.filter(function (i,n){ return n.id===ticketnumber});
+//console.log(openorders);
+for(var i=0;i<openorders.length;i++){
+if(openorders[i].id == ticketnumber){
+				var desc = openorders[i].description;
+				var prod = new Date();
+				var yr = prod.getFullYear();
+				var month = prod.getMonth();
+				var day = prod.getDate();
+				var barcodetext = openorders[i].customerid+""+desc.substring(0,9);
+				$('.lotnumber').text(ticketnumber);
+				$('.ponumber').text(openorders[i].po_number);				
+				$('.custnumber').text(openorders[i].customerid);
+				$('.productdescription').text(desc.substring(11));
+				$('.quantity').text(qty);
+				$('.operator').text(operator);
+				$('.proddate').text(yr.toString().substr(-2) +"-"+(month < 10 ? '0' + month : '' + month)+"-"+(day < 10 ? '0' + day : '' + day));
+				JsBarcode("#barcode", barcodetext );
+
+		html = '<div class="column" style="display:none;">'+
+			'<div class="">LOT#: <p class="lotnumber"></p></div>'+
+			'<div class="">PO#: <p class="ponumber"></p></div>'+
+			'<div class="">CUST#: <p class="custnumber"></p></div>'+
+			'<div class=""><p class="productdescription"></p></div>'+
+			'<div class="">QTY: <p class="quantity"></p></div>'+
+		'</div>'+
+		'<div class="column" style="display:none;">'+
+			'<div class="">'+
+				'<p class="columns">'+
+						'<span class="column">OPER:</span>'+
+						'<span class="operator column"></span>'+
+						'<span class="proddate column has-text-right"></span>'+
+					
+				'</p>'+
+			'</div>'+
+			'<div class=""><svg id="barcode"></svg></div>'+
+			'<div class=""><p class="barcode-text"></p></div>'+
+		'</div>';
+			
+
+}
+}
+}
+
+
+		});
+
+
+$('.corelabel').html(html);
+$('.printarea').css('display','block');
+
+
+});
+
+
+
+$('.printlabel').click(function(){
+		
+			$('.corelabel').print();
+			
+		});
+
+	
+		
+			
+	
+
+	
+
+
+	
+
+</script>
+  </body>
+</html>
