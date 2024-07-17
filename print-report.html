@@ -41,6 +41,7 @@
 					<option value="order-picked">Order Picked</option>
 					<option value="box-inventory">Box Inventory</option>
 					<option value="back-order">Back Order</option>
+					<option value="core-label">Print Core Labels</option>
 				</select>
 			</div>
 
@@ -449,7 +450,9 @@
 					$('#listtoprint').html('<table class="table is-bordered is-striped is-fullwidth"><thead><tr><th>BOX SIZE</th><th>AVAILABLE</th></tr></thead><tbody>'+resultHtml+'</tbody></table>');
     					$('#listtoprint').removeClass('list');
 						break;
-
+				case 'core-label':
+					window.open("./print-core-labels.html","_self");
+					break;
   				default:
     					return false;
 				}
